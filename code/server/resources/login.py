@@ -7,6 +7,8 @@ import json
 import requests
 import random, string
 
+from models.user import UserModel
+
 # refrencing the client secret file
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -60,9 +62,16 @@ class Login(Resource):
         answer = requests.get(userinfo_url, params=params)
         data = json.loads(answer.text)
 
-        # Store User info
-        name = data['name']
+        # store user info
+        if len(data['name']) < 1:
+            name = data['email']
         email = data['email']
         picture = data['picture']
 
-        return { 'Success': True, 'name': name, 'email': email, 'picture': picture}
+        # check if the user is in our db
+        user = UserModel.find_by_email(data['email'])
+        if user is None:
+            user = UserModel(None, name, None, email)
+            user.save_to_db()
+
+        return user.json()
