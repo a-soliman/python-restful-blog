@@ -17,15 +17,24 @@ class UserModel():
         }
     @classmethod
     def find_by_username(cls, username):
-        pass
+        for user in users:
+            if user.username == username:
+                return user
+        return None
     
     @classmethod
     def find_by_id(cls, id):
-        pass
+        for user in users:
+            if user.id == id:
+                return user
+        return None
     
     @classmethod
     def find_by_email(cls, email):
-        pass
+        for user in users:
+            if user.email == email:
+                return user
+        return None
 
     def save_to_db(self):
         pass
@@ -33,3 +42,6 @@ class UserModel():
     def delete_from_db(self):
         pass
     
+ahmed = UserModel(1, 'Ahmed', '123456', 'ahmed@mail.com')
+
+users = [ahmed]
