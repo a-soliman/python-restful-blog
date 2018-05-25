@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_restful import Api, reqparse
 
 from resources.login import Login # this is where the OUATH functionality come from.
+from resources.user import User
 
 app = Flask(__name__)
 
@@ -16,6 +17,7 @@ def after_request(response):
 api = Api(app)
 
 api.add_resource(Login, '/login')
+api.add_resource(User, '/user/<string:email>')
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
