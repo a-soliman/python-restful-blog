@@ -12,7 +12,6 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
     
 class Login(Resource):
-        
     def post(self):
         data = request.data
         args = json.loads(data)
@@ -23,7 +22,7 @@ class Login(Resource):
 
         # Collect the login data
         code = args['code']
-        
+
         try:
             #upgrade the authorization code into a credentials object
             oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
