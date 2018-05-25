@@ -12,34 +12,18 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
     
 class Login(Resource):
-    login_session_state = None
-    stored_access_token = ''
-    stored_user = {"name": "", "username": "", "picture": ""}
-
-    def get(self):
-        #define and generate session token and send it to the FE to save
-        state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))
-        login_session['state'] = state
-        Login.login_session_state =  state
-        response = {'state': Login.login_session_state} 
-        return response, 200
-    
+        
     def post(self):
         data = request.data
         args = json.loads(data)
 
         #check if data were passed
-        if args['state'] is None or args['code'] is None:
+        if args['code'] is None:
             return {'success': False, 'Message': 'Invalid request.'}, 400
 
         # Collect the login data
-        state = args['state']
         code = args['code']
-
-        # Compare the state with the saved state
-        if state != Login.login_session_state:
-            return {'Success': False, 'Message': "Passed STATE doesn't match the session STATE"}, 401
-
+        
         try:
             #upgrade the authorization code into a credentials object
             oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
