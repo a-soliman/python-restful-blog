@@ -1,6 +1,11 @@
 from flask import request, jsonify
 from flask_restful import Resource, reqparse
 from flask_jwt import JWT, jwt_required
+from flask_bcrypt import Bcrypt
+
+from werkzeug.security import generate_password_hash, \
+     check_password_hash
+
 
 from models.user import UserModel
 
@@ -57,7 +62,9 @@ class RegisterUser(Resource):
         if UserModel.find_by_email(data['email']):
             return {'success': False, 'message': 'a user with the provided email already exists'}
         
-        user = UserModel(None, data['username'], data['password'], data['email'])
+        # Hash the password
+        pw_hash = generate_password_hash(data['password'])
+        user = UserModel(None, data['username'], pw_hash, data['email'])
 
         # try to save the user to DB
         try:
