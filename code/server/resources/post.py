@@ -49,6 +49,7 @@ class ListPosts(Resource):
         user_id = current_identity.id
         posts = [post for post in PostModel.query.all()]
 
+        # check to see if the current user is the owner of the post
         for post in posts:
             if post.user == user_id:
                 post.owner = True
