@@ -10,6 +10,7 @@ class PostModel(db.Model):
     body = db.Column(db.String(2000))
     user= db.Column(db.Integer)
 
+
     def __init__(self, _id, title, body, user):
         self.id = _id
         self.title = title
@@ -38,7 +39,7 @@ class PostModel(db.Model):
         db.session.add(self)
         db.session.commit()
         return
-    
+
     def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()

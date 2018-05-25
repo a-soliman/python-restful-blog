@@ -4,6 +4,19 @@ from flask_jwt import JWT, jwt_required, current_identity
 from models.post import PostModel
 
 class Post(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('title',
+        type = str,
+        required = True,
+        help = 'title is required.'  
+    )
+    
+    parser.add_argument('body', 
+        type = str,
+        required = True,
+        help = 'body is required.'
+    )
+
     @jwt_required()
     def get(self):
         print(current_identity.id)
@@ -28,6 +41,29 @@ class Post(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
         return {'success': True, 'message': 'Post was deleted successfully.'}, 200
+
+    @jwt_required()
+    def put(self, id):
+        # get the current user's id
+        user_id = current_identity.id
+        post = PostModel.find_by_id(id)
+
+        if post is None:
+            return {'success': False, 'message': 'Post was not found'}, 404
+        
+        # check if the current user is the owner of the post
+        if post.user != user_id:
+            return {'success': False, 'message': 'Not Authorized to Edit this post'}, 401
+        
+        data = Post.parser.parse_args()
+        post.title = data['title']
+        post.body = data['body']
+        # try to delete the post or 500
+        try:
+            post.save_to_db()
+        except:
+            return {'message': 'Something went wrong'}, 500
+        return {'success': True, 'message': 'Post was edited successfully.'}, 200
 
 
 class AddPost(Resource):
