@@ -24,6 +24,10 @@ class User(Resource):
             return {'success': False, 'message': 'Something went wrong.'}, 500
         return {'success': True, 'message': 'User removed successfully.'}, 200
 
+class ListUsers(Resource):
+    def get(self):
+        return {'users': [user.json() for user in UserModel.query.all()]}
+        
 
 class RegisterUser(Resource):
     parser = reqparse.RequestParser()

@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_restful import Api, reqparse
 
 from resources.login import Login # this is where the OUATH functionality come from.
-from resources.user import User, RegisterUser
+from resources.user import User, RegisterUser, ListUsers
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -28,8 +28,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 api.add_resource(Login, '/login')
 api.add_resource(User, '/user/<string:email>')
-
 api.add_resource(RegisterUser, '/user/register')
+api.add_resource(ListUsers, '/users')
 
 if __name__ == '__main__':
     from db import db
