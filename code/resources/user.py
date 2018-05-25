@@ -10,3 +10,40 @@ class User(Resource):
         if user is None:
             return {'success': False, 'message': 'User not found'}, 404
         return user.json(), 400
+
+
+class RegisterUser(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('username',
+        type = str,
+        required = True,
+        help = 'username is required.'  
+    )
+    
+    parser.add_argument('password', 
+        type = str,
+        required = True,
+        help = 'password is required.'
+    )
+
+    parser.add_argument('email', 
+        type = str,
+        required = True,
+        help = 'email is required.'
+    )
+    def post(self):
+        data = RegisterUser.parser.parse_args()
+
+        # check if the user's email already exists in the DB
+        if UserModel.find_by_email(data['email']):
+            return {'success': False, 'message': 'a user with the provided email already exists'}
+        
+        user = UserModel(None, data['username'], data['password'], data['email'])
+
+        # try to save the user to DB
+        try:
+            user.save_to_db()
+        except:
+            return {'success': False, 'message': 'Something went wrong'}, 500
+
+        return {'success': True, 'message': 'user created successfully'}, 201
