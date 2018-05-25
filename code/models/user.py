@@ -22,6 +22,10 @@ class UserModel():
     @classmethod
     def find_by_id(cls, id):
         pass
+    
+    @classmethod
+    def find_by_email(cls, email):
+        pass
 
     def save_to_db(self):
         pass
