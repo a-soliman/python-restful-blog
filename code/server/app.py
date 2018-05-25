@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_restful import Api, reqparse
 from flask_jwt import JWT, jwt_required
-from flask_bcrypt import Bcrypt
 import datetime
 
 from security import authenticate, identity
@@ -25,7 +24,6 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
 
-bcrypt = Bcrypt(app)
 api = Api(app)
 
 app.secret_key = 'super_secret_key'

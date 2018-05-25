@@ -1,6 +1,7 @@
 from flask import request, jsonify
 from flask import session as login_session
 from flask_restful import Resource, reqparse
+from werkzeug.security import generate_password_hash
 
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 import httplib2
@@ -68,7 +69,7 @@ class Login(Resource):
             name = data['email']
         else:
             name = data['name']
-        password = 'default_password'
+        password = generate_password_hash('default_password')
         email = data['email']
         picture = data['picture']
 

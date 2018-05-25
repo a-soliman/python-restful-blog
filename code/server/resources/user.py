@@ -1,7 +1,6 @@
 from flask import request, jsonify
 from flask_restful import Resource, reqparse
 from flask_jwt import JWT, jwt_required
-from flask_bcrypt import Bcrypt
 
 from werkzeug.security import generate_password_hash, \
      check_password_hash
