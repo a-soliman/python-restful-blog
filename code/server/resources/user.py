@@ -1,9 +1,11 @@
 from flask import request, jsonify
 from flask_restful import Resource, reqparse
+from flask_jwt import JWT, jwt_required
 
 from models.user import UserModel
 
 class User(Resource):
+    @jwt_required()
     def get(self, email):
         user = UserModel.find_by_email(email)
 

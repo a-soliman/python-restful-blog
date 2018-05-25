@@ -65,13 +65,16 @@ class Login(Resource):
         # store user info
         if len(data['name']) < 1:
             name = data['email']
+        else:
+            name = data['name']
+        password = 'default_password'
         email = data['email']
         picture = data['picture']
 
         # check if the user is in our db
         user = UserModel.find_by_email(data['email'])
         if user is None:
-            user = UserModel(None, name, None, email)
+            user = UserModel(None, name, password, email)
             user.save_to_db()
 
         return user.json()
