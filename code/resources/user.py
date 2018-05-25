@@ -10,6 +10,19 @@ class User(Resource):
         if user is None:
             return {'success': False, 'message': 'User not found'}, 404
         return user.json(), 400
+    
+    def delete(self, email):
+        user = UserModel.find_by_email(email)
+
+        if user is None:
+            return {'success': False, 'message': 'User not found.'}, 404
+        
+        # try deleting the user
+        try:
+            user.delete_from_db()
+        except:
+            return {'success': False, 'message': 'Something went wrong.'}, 500
+        return {'success': True, 'message': 'User removed successfully.'}, 200
 
 
 class RegisterUser(Resource):
