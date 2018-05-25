@@ -9,6 +9,26 @@ class Post(Resource):
         print(current_identity.id)
         return{'message': 'hey'}
     
+    @jwt_required()
+    def delete(self, id):
+        # get the current user's id
+        user_id = current_identity.id
+        post = PostModel.find_by_id(id)
+
+        if post is None:
+            return {'success': False, 'message': 'Post was not found'}, 404
+        
+        # check if the current user is the owner of the post
+        if post.user != user_id:
+            return {'success': False, 'message': 'Not Authorized to delete this post'}, 401
+        
+        # try to delete the post or 500
+        try:
+            post.delete_from_db()
+        except:
+            return {'message': 'Something went wrong'}, 500
+        return {'success': True, 'message': 'Post was deleted successfully.'}, 200
+
 
 class AddPost(Resource):
     parser = reqparse.RequestParser()
@@ -44,7 +64,6 @@ class AddPost(Resource):
 class ListPosts(Resource):
     @jwt_required()
     def get(self):
-        
         #store current user id
         user_id = current_identity.id
         posts = [post for post in PostModel.query.all()]

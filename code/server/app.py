@@ -51,7 +51,7 @@ api.add_resource(User, '/user/<string:email>')
 api.add_resource(RegisterUser, '/user/register')
 api.add_resource(ListUsers, '/users')
 api.add_resource(ListPosts, '/posts')
-api.add_resource(Post, '/post')
+api.add_resource(Post, '/post/<string:id>')
 api.add_resource(AddPost, '/post/add')
 
 if __name__ == '__main__':
