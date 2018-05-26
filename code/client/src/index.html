@@ -4,73 +4,224 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Hello</title>
+	<title>Movie Theater</title>
+	<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/styles.css">
+
+	
 </head>
-<body onload="testRequest()">
+<body onload="viewModel.checkLoggedinUser()">
 	<!-- Body STARTS HERE -->
 	<div class="container">
-		<h1 class="text-danger text-center my-1">Gulp Starter</h1>
-		<div class="row">
-			<div class="col-md-9 col-sm-12 m-auto">
-				<div class="card ">
-					<div class="card-header">
-						<h5 class="card-title text-center">Includes</h5>
-					</div>
-					<div class="card-body">
-						<p class="text-center">jQuery, BootStrap4, Popper, Font-Awesome, Sass compiler, Babel, Source maps</p>
-					</div>
+		<header class="blog-header py-3">
+			<div 
+				class="row flex-nowrap justify-content-between align-items-center" >
+				<div 
+					class="col-4 d-flex justify-content-start align-items-center">
+					<a 
+						class="btn btn-sm btn-outline-secondary" 
+						href="#"  
+						data-toggle="modal" 
+						data-target="#signinModal" 
+						data-bind="visible: loggedinUser() == false">
+						Sign in
+					</a>
+				</div>
+				<div class="col-4 text-center">
+				<a class="blog-header-logo text-dark" href="#">Large</a>
+				</div>
+				<div class="col-4 d-flex justify-content-end align-items-center">
+					<a 
+						class="btn btn-sm btn-outline-secondary" 
+						href="#"
+						data-toggle="modal" 
+						data-target="#signupModal" 
+						data-bind="visible: loggedinUser() == false">
+						Sign up
+					</a>
+					<a 
+						class="btn btn-sm btn-outline-secondary" 
+						href="#"
+						data-bind="click: signout, visible: loggedinUser() == true">
+						Sign out
+					</a>
 				</div>
 			</div>
+		</header>
+
+		<!-- MESSAGES -->
+		<div
+			class="alert alert-success text-dark" 
+			data-bind="visible: successMessage ,text: successMessage">
 		</div>
-
-		<div class="row">
-			<div class="col-sm-3">
-				<div class="image-container py-4 text-center">
-					<img src="img/babel.png" alt="" class="img-fluid">
-				</div>
-				<div class="image-container py-4 text-center">
-					<img src="img/js.jpg" alt="" class="img-fluid">
-				</div>
-				<div class="image-container py-4 text-center">
-					<img src="img/jquery.gif" alt="" class="img-fluid">
-				</div>
-			</div>
-
-			<div class="col-sm-6">
-				<div class="image-container py-3">
-					<img src="img/gulp.png" alt="" class="img-fluid">
-				</div>
-			</div>
-
-
-
-			<div class="col-sm-3">
-				<div class="image-container py-4 text-center">
-					<img src="img/sass.png" alt="" class="img-fluid">
-				</div>
-				<div class="image-container py-4 text-center">
-					<img src="img/bootstrap.png" alt="" class="img-fluid">
-				</div>
-				<div class="image-container py-4 text-center">
-					<img src="img/font-awesome.png" alt="" class="img-fluid">
-				</div>
-			</div>
+		<div
+			class="alert alert-danger text-dark" 
+			data-bind="visible: failuerMessage ,text: failuerMessage">
 		</div>
 	</div>
 
-	<footer class="bg-danger py-2 text-center text-white fixed-bottom">
-		<p class="lead"> <i class="fa fa-code"></i> Ahmed Soliman</p>
-		<a href="https://github.com/a-soliman" target="_blank" class="text-white display-4">
-			<i class="fa fa-github"></i>
-		</a>
-	</footer>
+	<!-- =========== MODALS =========== -->
+	<!-- SIGNIN -->
+	<form action="" class="form" data-bind="submit: signin" >
+			<div class="modal fade" id="signinModal">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header bg-primary text-white">
+							<h5 class="modal-title">Sign in</h5>
+							<button class="close btn-white text-white" data-dismiss="modal">
+								<span>&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							
+							<div class="form-group">
+								<label for="title">Email</label>
+								<input 
+									type="email" 
+									class="form-control"
+									data-bind="value: signinInputs.email.value, valueUpdate: 'afterkeydown', event: {'keyup': validateSigninInputs.validateEmail, 'blur': validateSigninInputs.validateEmail}"
+								>
+								<!-- VALIDATION ERROR CONTAINER -->
+								<div 
+									class="validation-error alert alert-danger" 
+									data-bind="visible: signinInputs.email.valid() === false">
+									Validation Error
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="password">Password</label>
+								<input 
+									type="password" 
+									class="form-control"
+									data-bind="value: signinInputs.password.value, valueUpdate: 'afterkeydown', event: {'keyup': validateSigninInputs.validatePassword, 'blur': validateSigninInputs.validatePassword}"
+								>
+								<!-- VALIDATION ERROR CONTAINER -->
+								<div 
+									class="validation-error alert alert-danger" 
+									data-bind="visible: signinInputs.password.valid() === false">
+									Validation Error
+								</div>
+								
+							</div>
+							<div >
+								<div class="text-center">OR</div>
+								<!-- GOOGLE PLUS SIGN IN BUTTON-->   
+								<div id="signinButton" class="text-center">
+										<span class="g-signin"
+											data-scope="openid email"
+											data-clientid="1016299865700-esbt9asae9pse8ner0pl0vhp4bv1unb3.apps.googleusercontent.com"
+											data-redirecturi="postmessage"
+											data-accesstype="offline"
+											data-cookiepolicy="single_host_origin"
+											data-callback="GsignInCallback"
+											data-approvalprompt="force">
+											<button class="btn google-custom"><span>G</span>Login with Google</button>
+										</span>
+									</div>
+	
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<button class="btn btn-primary" type="submit">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<!-- SIGNUP -->
+	<form action="" class="form" data-bind="submit: signup" >
+			<div class="modal fade" id="signupModal">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header bg-primary text-white">
+							<h5 class="modal-title">Sign up</h5>
+							<button class="close btn-white text-white" data-dismiss="modal">
+								<span>&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+
+								<div class="form-group">
+										<label for="username">Username</label>
+										<input 
+											type="text" 
+											class="form-control"
+											data-bind="value: signupInputs.username.value, valueUpdate: 'afterkeydown', event: {'keyup': validateSignupInputs.validateUsername, 'blur': validateSignupInputs.validateUsername}"
+										>
+										<!-- VALIDATION ERROR CONTAINER -->
+										<div 
+											class="validation-error alert alert-danger" 
+											data-bind="visible: signupInputs.username.valid() === false">
+											Validation Error
+										</div>
+									</div>
+								<div class="form-group">
+									<label for="Email">Email</label>
+									<input 
+										type="email" 
+										class="form-control"
+										data-bind="value: signupInputs.email.value, valueUpdate: 'afterkeydown', event: {'keyup': validateSignupInputs.validateEmail, 'blur': validateSignupInputs.validateEmail}"
+									>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: signupInputs.email.valid() === false">
+										Validation Error
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input 
+										type="password" 
+										class="form-control"
+										data-bind="value: signupInputs.password.value, valueUpdate: 'afterkeydown', event: {'keyup': validateSignupInputs.validatePassword, 'blur': validateSignupInputs.validatePassword}"
+									>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: signupInputs.password.valid() === false">
+										Validation Error
+									</div>
+									
+								</div>
+								<div class="text-center">
+									<div class="text-center">OR</div>
+									<!-- GOOGLE PLUS SIGN IN BUTTON-->   
+									<div id="signinButton" class="text-center">
+											<span class="g-signin"
+												data-scope="openid email"
+												data-clientid="1016299865700-esbt9asae9pse8ner0pl0vhp4bv1unb3.apps.googleusercontent.com"
+												data-redirecturi="postmessage"
+												data-accesstype="offline"
+												data-cookiepolicy="single_host_origin"
+												data-callback="GsignInCallback"
+												data-approvalprompt="force">
+												<button class="btn google-custom"><span>G</span>Login with Google</button>
+											</span>
+										</div>
+								</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<button class="btn btn-primary" type="submit">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
 	<!-- Body ENDS HERE -->
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/popper.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/knockout-latest.js"></script>
 	<script src="./js/main.js"></script>
 </body>
 </html>
