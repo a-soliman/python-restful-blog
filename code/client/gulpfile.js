@@ -72,10 +72,10 @@ gulp.task('sass:watch', () => {
 
 gulp.task('copy-js', () => {
 	console.log('copying bootstrap js from node_modules')
-	return gulp.src (['node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js'])
+	return gulp.src (['node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/jquery/dist/jquery.min.js', 'node_modules/popper.js/dist/umd/popper.min.js', 'node_modules/knockout/build/output/knockout-latest.js'])
 		.pipe(gulp.dest('dist/js'))
 		.pipe(livereload())
-})
+});
 
 gulp.task('scripts', () => {
 	console.log('Starting SCRIPTS task')
