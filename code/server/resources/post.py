@@ -17,6 +17,12 @@ class Post(Resource):
         help = 'body is required.'
     )
 
+    parser.add_argument('category_id',
+        type = int,
+        required = True,
+        help = 'Categpry is required.'
+    )
+
     @jwt_required()
     def get(self):
         print(current_identity.id)
@@ -58,6 +64,8 @@ class Post(Resource):
         data = Post.parser.parse_args()
         post.title = data['title']
         post.body = data['body']
+        post.category_id = data['category_id']
+
         # try to delete the post or 500
         try:
             post.save_to_db()
@@ -80,6 +88,12 @@ class AddPost(Resource):
         help = 'body is required.'
     )
 
+    parser.add_argument('category_id',
+        type = int,
+        required = True,
+        help = 'Categpry is required.'
+    )
+
     @jwt_required()
     def post(self):
         # get the current user's id
@@ -87,7 +101,7 @@ class AddPost(Resource):
         # get the post data
         data = AddPost.parser.parse_args()
         # Create a new post using the data and user_id
-        post = PostModel(None, data['title'], data['body'], user_id)
+        post = PostModel(None, data['title'], data['body'], user_id, data['category_id'])
 
         # Try saving the post
         try:
