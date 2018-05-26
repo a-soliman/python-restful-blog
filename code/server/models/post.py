@@ -9,13 +9,15 @@ class PostModel(db.Model):
     title = db.Column(db.String(80))
     body = db.Column(db.String(2000))
     user= db.Column(db.Integer)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    category = db.relationship('CategoryModel')
 
-
-    def __init__(self, _id, title, body, user):
+    def __init__(self, _id, title, body, user, category_id):
         self.id = _id
         self.title = title
         self.body = body
         self.user = user
+        self.category_id = category_id
         self.owner = None
 
     def json(self):
@@ -24,6 +26,7 @@ class PostModel(db.Model):
             "title": self.title,
             "body": self.body,
             "user": self.user,
+            "category_id": self.category_id,
             "owner": self.owner
         }
 
