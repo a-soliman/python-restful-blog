@@ -1,8 +1,33 @@
-@import "./reset/basic-reset";
 @import "./partials/vars";
+@import "./reset/basic-reset";
 
+header {
+	border-bottom: 2px solid $grey;
 
+	.blog-header-logo {
+		font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+		font-size: 2.25rem;
+	}
+}
 
-body {
-	background: $white;
+.google-custom {
+	padding: 0 20px 0 0;
+	background-color: #DD4B39;
+	color: white;
+	height: 50px;
+	font-size: 22px;
+
+	span {
+		display: inline-block;
+		height: 100%;
+		padding-top: 7px;
+		padding-left: 15px;
+		padding-right: 15px;
+		margin-right: 10px;
+		border-right: 2px solid white;
+	}
+
+	&:hover {
+		background-color: #E74B37;
+	}
 }
