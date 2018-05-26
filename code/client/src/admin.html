@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Movie Theater</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body onload="fetchMovies()" class="bg-white">
+
+	<!-- NAV -->
+	<nav class="navbar nav-primary bg-primary navbar-expand-sm navbar-dark fixed-top">
+		<div class="container">
+			<a href="index.html" class="navbar-brand">Cinema</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item ">
+						<a href="index.html" class="nav-link">Home</a>
+					</li>
+					<li class="nav-item active">
+						<a href="admin.html" class="nav-link">Admin</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- HEADER -->
+	<header id="main-header" class="py-2 mt-5 bg-primary text-white">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<h1>
+						<i class="fa fa-gear"></i>
+						ADMIN
+					</h1>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- ACTIONS -->
+	<section id="actions" class="py-4 mb-4 bg-light">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<a href="#" class="btn btn-primary btn-block btn-lg " data-toggle="modal" data-target="#addMovieModal">
+						<i class="fa fa-plus"></i> 
+						Add Movie
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Movies Table -->
+	<section id="posts">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>Latest Movies</h4>
+							</div>
+							<table class="table table-striped align-middle" >
+								<thead class="thead-dark">
+									<tr>
+										<th>Title</th>
+										<th>Story Line</th>
+										<th>Poster</th>
+										<th>Trailer</th>
+										<th>Edit</th>
+										<th>Delete</th>
+									</tr>
+								</thead>
+								<tbody data-bind="foreach: movies">
+									<tr>
+										<td class="align-middle" data-bind="text: title"></td>
+										<td class="align-middle" data-bind="text: $parent.limitStoryLineCopy($data)"></td>
+										<td class="align-middle" align="center">
+												<img class="img-thumbnail" data-bind="attr: {src: poster}">
+										</td>
+										<td class="align-middle" align="center">
+											<a href="" >
+												<i class="fa fa-play-circle text-danger"></i>
+											</a>
+										</td>
+										<td class="align-middle" align="center">
+											<button class="btn btn-warning btn-sm" data-bind="click: $parent.setEditableMovieValues" data-toggle="modal" data-target="#editMovieModal">
+												<i class="fa fa-edit"></i>
+											</button>
+										</td>
+										<td class="align-middle" align="center">
+											<button class="btn btn-danger btn-sm" data-bind="click: $parent.removeMovie">
+												<i class="fa fa-trash"></i>
+											</button>
+										</td>
+									</tr>
+									
+	
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+	
+				<div class="row"></div>
+					<div class="col-md-3">
+						<div class="card text-center bg-primary text-white mb-3">
+							<div class="card-body">
+								<h3>Posts</h3>
+								<h1 class="display-1">
+									<i class="fa fa-pencil"></i> 6
+								</h1>
+								<a href="posts.html" class="btn btn-outline-light btn-sm btn-block"> View</a>
+							</div>
+						</div>
+	
+						<div class="card text-center bg-success text-white mb-3">
+							<div class="card-body">
+								<h3>Categories</h3>
+								<h1 class="display-1">
+									<i class="fa fa-folder-open-o"></i> 4
+								</h1>
+								<a href="categories.html" class="btn btn-outline-light btn-sm btn-block"> View</a>
+							</div>
+						</div>
+	
+						<div class="card text-center bg-warning text-white mb-3">
+							<div class="card-body">
+								<h3>Users</h3>
+								<h1 class="display-1">
+									<i class="fa fa-users"></i> 2
+								</h1>
+								<a href="users.html" class="btn btn-outline-light btn-sm btn-block"> View</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	
+
+	
+	<footer id="main-footer" class="bg-primary text-white mt-5 p-5">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<p class="lead text-center text-white">Copyright &copy; Movie Theater</p>
+				</div>
+			</div>
+		</div>
+	</footer>	
+
+
+	<!-- =========== MODALS =========== -->
+	<!-- ADD MOVIE -->
+	<form action="" class="form" data-bind="submit: addMovie">
+		<div class="modal fade" id="addMovieModal">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header bg-primary text-white">
+						<h5 class="modal-title">Add Movie</h5>
+						<button class="close btn-white text-white" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						
+							<div class="form-group">
+								<label for="title">Title</label>
+								<input 
+									type="text" 
+									class="form-control"
+									data-bind="value: addMovieInputs.title.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddMovieInputs.validateTitle, 'blur': validateAddMovieInputs.validateTitle}"
+								>
+								<!-- VALIDATION ERROR CONTAINER -->
+								<div 
+									class="validation-error alert alert-danger" 
+									data-bind="visible: addMovieInputs.title.valid() === false">
+									Validation Error
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="story_line">Story Line</label>
+								<textarea 
+									id="story_line" 
+									name="story_line" 
+									rows="3" 
+									class="form-control"
+									data-bind="value: addMovieInputs.story_line.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddMovieInputs.validateStory_line, 'blur': validateAddMovieInputs.validateStory_line}"
+								>
+								</textarea>
+								<!-- VALIDATION ERROR CONTAINER -->
+								<div 
+									class="validation-error alert alert-danger" 
+									data-bind="visible: addMovieInputs.story_line.valid() === false">
+									Validation Error
+								</div>
+								
+							</div>
+
+							<div class="form-group">
+								<label for="poster">Poster Link</label>
+								<input 
+									type="text" 
+									class="form-control" 
+									name="poster" 
+									id="poster"
+									data-bind="value:addMovieInputs.poster.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddMovieInputs.validatePoster, 'blur': validateAddMovieInputs.validatePoster}"
+								>
+								<!-- VALIDATION ERROR CONTAINER -->
+								<div 
+									class="validation-error alert alert-danger" 
+									data-bind="visible: addMovieInputs.poster.valid() === false">
+									Validation Error
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="trailer_link">Trailer Link</label>
+								<input 
+									type="text" 
+									class="form-control" 
+									name="trailer_link" 
+									id="trailer_link"
+									data-bind="value: addMovieInputs.trailer_link.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddMovieInputs.validateTrailer_link, 'blur': validateAddMovieInputs.validateTrailer_link}"
+								>
+								<!-- VALIDATION ERROR CONTAINER -->
+								<div 
+									class="validation-error alert alert-danger" 
+									data-bind="visible: addMovieInputs.trailer_link.valid() === false">
+									Validation Error
+								</div>
+							</div>
+							
+							
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						<button class="btn btn-primary" type="submit">Submit</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	
+	<!-- EDIT MOVIE -->
+	<form action="" class="form" data-bind="submit: editMovie">
+			<div class="modal fade" id="editMovieModal">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header bg-primary text-white">
+							<h5 class="modal-title">Edit Movie</h5>
+							<button class="close btn-white text-white" data-dismiss="modal">
+								<span>&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							
+								<div class="form-group">
+									<label for="title">Title</label>
+									<input 
+										type="text" 
+										class="form-control"
+										data-bind="value: editMovieInputs.title.value, valueUpdate: 'afterkeydown', event: {'keyup': validateEditMovieInputs.validateTitle, 'blur': validateEditMovieInputs.validateTitle}"
+									>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: editMovieInputs.title.valid() === false">
+										Validation Error
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="story_line">Story Line</label>
+									<textarea 
+										id="story_line" 
+										name="story_line" 
+										rows="3" 
+										class="form-control"
+										data-bind="value: editMovieInputs.story_line.value, valueUpdate: 'afterkeydown', event: {'keyup': validateEditMovieInputs.validateStory_line, 'blur': validateEditMovieInputs.validateStory_line}"
+									>
+									</textarea>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: editMovieInputs.story_line.valid() === false">
+										Validation Error
+									</div>
+									
+								</div>
+	
+								<div class="form-group">
+									<label for="poster">Poster Link</label>
+									<input 
+										type="text" 
+										class="form-control" 
+										name="poster" 
+										id="poster"
+										data-bind="value:editMovieInputs.poster.value, valueUpdate: 'afterkeydown', event: {'keyup': validateEditMovieInputs.validatePoster, 'blur': validateEditMovieInputs.validatePoster}"
+									>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: editMovieInputs.poster.valid() === false">
+										Validation Error
+									</div>
+								</div>
+	
+								<div class="form-group">
+									<label for="trailer_link">Trailer Link</label>
+									<input 
+										type="text" 
+										class="form-control" 
+										name="trailer_link" 
+										id="trailer_link"
+										data-bind="value: editMovieInputs.trailer_link.value, valueUpdate: 'afterkeydown', event: {'keyup': validateEditMovieInputs.validateTrailer_link, 'blur': validateEditMovieInputs.validateTrailer_link}"
+									>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: editMovieInputs.trailer_link.valid() === false">
+										Validation Error
+									</div>
+								</div>
+								
+								
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<button class="btn btn-primary" type="submit">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/popper.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/knockout-latest.js"></script>
+	<script src="./js/main.js"></script>
+</body>
+</html>
