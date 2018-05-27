@@ -36,6 +36,7 @@ var viewModel = {
             
             // clear the modal form and hide it
             $('.modal').modal('hide');
+            viewModel.fetchData()
         }
     },
 
@@ -79,7 +80,8 @@ var viewModel = {
     saveAccessToken: (access_token) => {
         console.log('recived access token');
         localStorage.setItem('access_token', access_token);
-        console.log('from localStorage', localStorage.getItem('access_token'))
+        console.log('from localStorage', localStorage.getItem('access_token'));
+        viewModel.fetchData()
 
     },
     
@@ -165,6 +167,7 @@ var viewModel = {
     signout: () => {
         // clear the access_token from local storage
         localStorage.removeItem('access_token')
+        viewModel.removeDataFromView()
         viewModel.loggedinUser(false)
     },
 
@@ -191,7 +194,13 @@ var viewModel = {
     },
 
     getPosts: () => {
-        console.log('test')
+        console.log('getPosts called')
+        if (localStorage.getItem('access_token') == null) {
+            console.log('getPosts called, NO access toke... aborting')
+            return;
+        }
+
+        do_getPosts();
     },
 
     // SignUp functions
@@ -279,6 +288,19 @@ var viewModel = {
             body.valid(true);
             return;
         }
+    },
+
+    fetchData: () => {
+        if ( localStorage.getItem('access_token') == null) {
+            return;
+        }
+        viewModel.getCategories()
+        viewModel.getPosts()
+    },
+
+    removeDataFromView: () => {
+        viewModel.posts.removeAll()
+        viewModel.categories.removeAll()
     }
 
     /* END */
@@ -294,48 +316,6 @@ var viewModel = {
     -------------------------------------------------
 */
 
-/* Fetch GET Requiest to to the REST API to get a list of movies */
-function fetchMovies() {
-    fetch('http://localhost:5000')
-        .then( function(response) {
-            if (response.status !== 200 ) {
-                console.log('Looks like the backend server is not running on port 5000. ' + response.status);
-                response.json().then( ( data ) => {
-                    viewModel.failuerMessage(data.message)
-                })
-                return
-            }
-            response.json().then(function(data) {
-
-                //append the movies to the viewModel
-                viewModel.movies(data.movies)
-            })
-        })
-        .catch( function( err ) {
-            console.log('Fetch Error :-S', err);
-        })
-}
-
-
-/* Fetch DELETE Requiest to to the REST API */
-function deleteMovie(_id) {
-    return fetch(`http://localhost:5000/${_id}`, {
-        method: 'delete'
-    })
-    .then ( ( response ) => {
-        if (response.status !== 200 ) {
-            console.log('Looks like the backend server is not running on port 5000. ' + response.status);
-            response.json().then( ( data ) => {
-                viewModel.failuerMessage(data.message)
-            })
-            return
-        }
-        response.json().then( ( data ) => {
-            viewModel.successMessage(data.message)
-            viewModel.removeMovieLocally(_id);
-        })
-    })
-};
 /* Fetch POST Requiest to to the REST API */
 function do_signin(user) {
     return fetch(`http://localhost:5555/auth`, {
@@ -353,6 +333,7 @@ function do_signin(user) {
                 viewModel.saveAccessToken(access_token);
                 // signal that a user is in
                 viewModel.loggedinUser(true)
+                
                 viewModel.successMessage('You are now loggedIn successfully!');
                 return true;
             })
@@ -415,56 +396,8 @@ function do_signup(user) {
         }
     })
 };
-/* Fetch POST Requiest to to the REST API */
-function postMovie(movie) {
-    return fetch(`http://localhost:5000/add`, {
-        body: JSON.stringify(movie),
-        cache: 'no-cache',
-        headers: {
-            'content-type': 'application/json'
-        },
-        method: 'POST'
-    })
-    .then( ( response ) => {
-        if (response.status !== 201 ) {
-            console.log('Looks like the backend server is not running on port 5000. ' + response.status);
-            response.json().then( ( data ) => {
-                viewModel.failuerMessage(data.message)
-            })
-            return false;
-        }
-        response.json().then( ( data ) => {
-            viewModel.successMessage(data.message);
-            viewModel.addMovieLocally(movie);
-            return true;
-        })
-    })
-};
 
-/* Fetch PUT Requiest to to the REST API */
-function putMovies(_id, editedMovie) {
-    return fetch(`http://localhost:5000/${_id}`, {
-        body: JSON.stringify(editedMovie),
-        cache: 'no-cache',
-        headers: {
-            'content-type': 'application/json'
-        },
-        method: 'put'
-    })
-    .then( ( response ) => {
-        if ( response.status !== 200 ) {
-            console.log('Looks like the backend server is not running on port 5000. ' + response.status);
-            response.json().then( ( data ) => {
-                viewModel.failuerMessage(data.message)
-            })
-            return false;
-        }
-        response.json().then( ( data ) => {
-            viewModel.successMessage(data.message);
-            return true;
-        })
-    })
-}
+
 
 
 function GsignInCallback(authResult) {
@@ -487,13 +420,62 @@ function GsignInCallback(authResult) {
     }).then( ( data ) => {
         do_signin({'email': data.email, 'password': 'default_password'});
         $('.modal').modal('hide');
+        
     })
 
     console.log('Gconnect called')
 }
 
 function do_addPost(post) {
-    console.log(post)
+    return fetch(`http://localhost:5555/post/add`, {
+        body: JSON.stringify(post),
+        cache: 'no-cache',
+        headers: {
+            'content-type': 'application/json',
+            'authorization': `JWT ${localStorage.getItem('access_token')}`
+        },
+        method: 'POST'
+    })
+    .then( ( response ) => {
+        if (response.status === 401 ) {
+            response.json().then( ( data ) => {
+                viewModel.failuerMessage(data.message);
+                return false;
+            })
+            
+        }
+        response.json().then( ( data ) => {
+            viewModel.successMessage(data.message);
+            // viewModel.addMovieLocally(movie);
+            console.log(data)
+            return true;
+        })
+    })
+}
+
+function do_getPosts() {
+    fetch('http://localhost:5555/posts', {
+        headers: {
+            'Authorization': `JWT ${localStorage.getItem('access_token')}`
+        }
+    })
+        .then( function(response) {
+            if (response.status !== 200 ) {
+                console.log('Looks like the backend server is not running on port 5000. ' + response.status);
+                response.json().then( ( data ) => {
+                    viewModel.failuerMessage(data.message)
+                })
+                return
+            }
+            response.json().then(function(data) {
+                console.log(data)
+                //append the movies to the viewModel
+                viewModel.posts(data.posts)
+            })
+        })
+        .catch( function( err ) {
+            console.log('Fetch Error :-S', err);
+        })
 }
 // APPLYES THE KNOCKOUT BINDINGS
 ko.applyBindings(viewModel)
