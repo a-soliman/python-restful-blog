@@ -167,6 +167,10 @@ var viewModel = {
         viewModel.loggedinUser(false)
     },
 
+    getPosts: () => {
+        console.log('test')
+    }
+
     /* END */
 
     
@@ -371,7 +375,8 @@ function GsignInCallback(authResult) {
     .then( ( response ) => {
         return response.json()
     }).then( ( data ) => {
-        console.log(data)
+        do_signin({'email': data.email, 'password': 'default_password'});
+        $('.modal').modal('hide');
     })
 
     console.log('Gconnect called')

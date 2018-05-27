@@ -3,6 +3,8 @@ from flask import session as login_session
 from flask_restful import Resource, reqparse
 from werkzeug.security import generate_password_hash
 
+from flask_jwt import JWT, jwt_required
+
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 import httplib2
 import json
@@ -10,6 +12,8 @@ import requests
 import random, string
 
 from models.user import UserModel
+import security
+
 
 # refrencing the client secret file
 CLIENT_ID = json.loads(
@@ -80,3 +84,4 @@ class Login(Resource):
             user.save_to_db()
 
         return user.json()
+       
