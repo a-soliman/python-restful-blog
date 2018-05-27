@@ -192,6 +192,93 @@ var viewModel = {
 
     getPosts: () => {
         console.log('test')
+    },
+
+    // SignUp functions
+    addPost: () => {
+        const inputs = viewModel.addPostInputs;
+        const { title, body } = inputs;
+        const elementsArray = [title, body ];
+        
+        // validate the category input
+        let categoryValue = $('#category').val();
+        console.log(categoryValue)
+        if ( categoryValue.length < 1) {
+            console.log('aborting...')
+            return false;
+        }
+
+
+        for ( let i in elementsArray ){
+            let element = elementsArray[i];
+            if ( element.valid() !== true ) {
+                element.valid(false);
+                return;
+            }
+        }
+        
+        let newPost = {
+            category_id: categoryValue,
+            title: title.value(),
+            body: body.value()
+        }
+        
+        if( do_addPost(newPost) ) {
+            // Add the post locally
+            $('.modal').modal('hide');
+            viewModel.successMessage('Added Post successfully.')
+        }
+    },
+
+     /* Values of the addPost form */
+     addPostInputs: {
+        category : {
+            value: ko.observable(''),
+            valid: ko.observable()
+        },
+        title : {
+            value: ko.observable(''),
+            valid: ko.observable()
+        },
+        body: {
+            value: ko.observable(''),
+            valid: ko.observable()
+        }
+    },
+
+    // A SET OF FUNCTIONS TO VALIDATE EACH INPUT FIELD 
+    validateAddPostInputs: {
+        validateCategory: () => {
+            let category = viewModel.addPostInputs.category;
+            console.log(category.value())
+            if ( category.value().length > 0 ) {
+                console.log('false: ', category.value())
+                valid.valid(false);
+                return;
+            }
+            category.valid(true);
+            return;
+        },
+        validateTitle: () => {
+            let title = viewModel.addPostInputs.title;
+
+            if ( title.value().length < 6) {
+                title.valid(false);
+                return;
+            }
+            title.valid(true);
+            return;
+        },
+        validateBody: () => {
+            let body = viewModel.addPostInputs.body;
+
+            if ( body.value().length < 6){
+                body.valid(false);
+                return
+            }
+            body.valid(true);
+            return;
+        }
     }
 
     /* END */
@@ -403,6 +490,10 @@ function GsignInCallback(authResult) {
     })
 
     console.log('Gconnect called')
+}
+
+function do_addPost(post) {
+    console.log(post)
 }
 // APPLYES THE KNOCKOUT BINDINGS
 ko.applyBindings(viewModel)
