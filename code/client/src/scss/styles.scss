@@ -3,6 +3,7 @@
 
 header {
 	border-bottom: 2px solid $grey;
+	margin-bottom: 0.75em;
 
 	.blog-header-logo {
 		font-family: "Playfair Display", Georgia, "Times New Roman", serif;
@@ -29,5 +30,18 @@ header {
 
 	&:hover {
 		background-color: #E74B37;
+	}
+}
+
+.categories {
+	.dynamic-categories {
+		display: inline-block;
+	}
+	.flex-container {
+		display: flex;
+	}
+	.flex-item {
+		flex-grow:1;
+		margin: 0 2px;
 	}
 }
