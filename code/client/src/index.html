@@ -20,68 +20,81 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-					<header class="blog-header py-3">
-							<div 
-								class="row flex-nowrap justify-content-between align-items-center" >
-								<div 
-									class="col-4 d-flex justify-content-start align-items-center">
-									<a 
-										class="btn btn-sm btn-outline-secondary" 
-										href="#"  
-										data-toggle="modal" 
-										data-target="#signinModal" 
-										data-bind="visible: loggedinUser() == false">
-										Sign in
-									</a>
-								</div>
-								<div class="col-4 text-center">
-								<a class="blog-header-logo text-dark" href="#">Large</a>
-								</div>
-								<div class="col-4 d-flex justify-content-end align-items-center">
-									<a 
-										class="btn btn-sm btn-outline-secondary" 
-										href="#"
-										data-toggle="modal" 
-										data-target="#signupModal" 
-										data-bind="visible: loggedinUser() == false">
-										Sign up
-									</a>
-									<a 
-										class="btn btn-sm btn-outline-secondary" 
-										href="#"
-										data-bind="click: signout, visible: loggedinUser() == true">
-										Sign out
-									</a>
-								</div>
-							</div>
-						</header>
+				<header class="blog-header py-3">
+					<div 
+						class="row flex-nowrap justify-content-between align-items-center" >
+						<div 
+							class="col-4 d-flex justify-content-start align-items-center">
+							<a 
+								class="btn btn-sm btn-outline-secondary" 
+								href="#"  
+								data-toggle="modal" 
+								data-target="#signinModal" 
+								data-bind="visible: loggedinUser() == false">
+								Sign in
+							</a>
+						</div>
+						<div class="col-4 text-center">
+						<a class="blog-header-logo text-dark" href="#">Large</a>
+						</div>
+						<div class="col-4 d-flex justify-content-end align-items-center">
+							<a 
+								class="btn btn-sm btn-outline-secondary" 
+								href="#"
+								data-toggle="modal" 
+								data-target="#signupModal" 
+								data-bind="visible: loggedinUser() == false">
+								Sign up
+							</a>
+							<a 
+								class="btn btn-sm btn-outline-secondary" 
+								href="#"
+								data-bind="click: signout, visible: loggedinUser() == true">
+								Sign out
+							</a>
+						</div>
+					</div>
+				</header>
 			</div>
 		</div>
 
-		<!-- MESSAGES -->
-		<div class="row">
-			<div class="col">
+		<main>
+			<!-- MESSAGES -->
+			<div class="row">
+				<div class="col">
 					<div
-					class="alert alert-success text-dark" 
-					data-bind="visible: successMessage ,text: successMessage">
-				</div>
-				<div
-					class="alert alert-danger text-dark" 
-					data-bind="visible: failuerMessage ,text: failuerMessage">
+						class="alert alert-success text-dark" 
+						data-bind="visible: successMessage ,text: successMessage">
+					</div>
+					<div
+						class="alert alert-danger text-dark" 
+						data-bind="visible: failuerMessage ,text: failuerMessage">
+					</div>
 				</div>
 			</div>
-		</div>
+		
 	
-
-		<!-- CATEGORIES -->
-		<div class="row categories">
-			<div class="col text-center flex-container">
-				<a href="#" class="btn btn-outline-secondary flex-item" >All</a>
-				<div class="dynamic-categories flex-item flex-container" data-bind="foreach: categories">
-					<a href="#" class="btn btn-outline-secondary flex-item" data-bind="text:name"></a>
+			<!-- CATEGORIES -->
+			<div class="row categories">
+				<div class="col text-center flex-container">
+					<a href="#" class="btn btn-outline-secondary flex-item" >All</a>
+					<div class="dynamic-categories flex-item flex-container" data-bind="foreach: categories">
+						<a href="#" class="btn btn-outline-secondary flex-item" data-bind="text:name"></a>
+					</div>
 				</div>
 			</div>
-		</div>
+
+			<!-- ADD POST -->
+			<div class="row add-post">
+				<div class="col">
+					<button class="btn btn-secondary btn-block btn-lg">Add Post</button>
+				</div>
+			</div>
+		</main>
+
+
+
+
 	</div>
 	<!-- =========== MODALS =========== -->
 	<!-- SIGNIN -->
