@@ -87,7 +87,11 @@
 			<!-- ADD POST -->
 			<div class="row add-post">
 				<div class="col">
-					<button class="btn btn-secondary btn-block btn-lg">Add Post</button>
+					<button 
+						class="btn btn-secondary btn-block btn-lg"
+						data-toggle="modal"
+						data-target="#addPostModal"
+						>Add Post</button>
 				</div>
 			</div>
 		</main>
@@ -239,6 +243,73 @@
 										</div>
 								</div>
 						</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<button class="btn btn-primary" type="submit">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<!-- ADDPOST -->
+		<form action="" class="form" data-bind="submit: addPost" >
+			<div class="modal fade" id="addPostModal">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header bg-primary text-white">
+							<h5 class="modal-title">Add Post</h5>
+							<button class="close btn-white text-white" data-dismiss="modal">
+								<span>&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+								<div class="form-group">
+									<label for="category">Category</label>
+									<select 
+										name="category" 
+										id="category" 
+										class="form-control"
+										data-bind="options: categories, optionsText: 'name', optionsValue: 'id', optionsCaption: 'choose...', value: addPostInputs.category.value, events: {'blue': validateAddPostInputs.validateCategory}">
+											
+									</select>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: addPostInputs.category.valid() === false">
+										Validation Error
+									</div>
+									
+								</div>
+								<div class="form-group">
+										<label for="title">Title</label>
+										<input 
+											type="text" 
+											class="form-control"
+											data-bind="value: addPostInputs.title.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddPostInputs.validateTitle, 'blur': validateAddPostInputs.validateTitle}"
+										>
+										<!-- VALIDATION ERROR CONTAINER -->
+										<div 
+											class="validation-error alert alert-danger" 
+											data-bind="visible: addPostInputs.title.valid() === false">
+											Validation Error
+										</div>
+									</div>
+								<div class="form-group">
+									<label for="body">Body</label>
+									<input 
+										type="text" 
+										class="form-control"
+										data-bind="value: addPostInputs.body.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddPostInputs.validateBody, 'blur': validateAddPostInputs.validateBody}"
+									>
+									<!-- VALIDATION ERROR CONTAINER -->
+									<div 
+										class="validation-error alert alert-danger" 
+										data-bind="visible: addPostInputs.body.valid() === false">
+										Validation Error
+									</div>
+								</div>
+							</div>
 						<div class="modal-footer">
 							<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 							<button class="btn btn-primary" type="submit">Submit</button>
