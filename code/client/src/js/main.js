@@ -1,6 +1,7 @@
 /* Knockout data binding and templating */
 var viewModel = {
     posts: ko.observableArray(),
+    categories: ko.observableArray(),
     loggedinUser: ko.observable(),
     successMessage: ko.observable(),
     failuerMessage: ko.observable(),
@@ -165,6 +166,28 @@ var viewModel = {
         // clear the access_token from local storage
         localStorage.removeItem('access_token')
         viewModel.loggedinUser(false)
+    },
+
+    getCategories: () => {
+        fetch('http://localhost:5555/categories')
+        .then( function(response) {
+            if (response.status !== 200 ) {
+                console.log('Looks like the backend server is not running on port 5000. ' + response.status);
+                response.json().then( ( data ) => {
+                    viewModel.failuerMessage(data.message)
+                })
+                return
+            }
+            response.json().then(function(data) {
+
+                //append the movies to the viewModel
+                viewModel.categories(data.categories)
+                console.log(data)
+            })
+        })
+        .catch( function( err ) {
+            console.log('Fetch Error :-S', err);
+        })
     },
 
     getPosts: () => {
