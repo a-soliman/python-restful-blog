@@ -12,7 +12,7 @@ class PostModel(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     category = db.relationship('CategoryModel')
 
-    def __init__(self, _id, title, body, user, category_id):
+    def __init__(self, _id, title, body, user, category_id, owner=None):
         self.id = _id
         self.title = title
         self.body = body

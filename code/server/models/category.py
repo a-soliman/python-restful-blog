@@ -17,8 +17,7 @@ class CategoryModel(db.Model):
     def json(self):
         return {
             "id": self.id,
-            "name": self.name,
-            "posts": [post.json() for post in self.posts.all()]
+            "name": self.name
         }
     
     @classmethod
