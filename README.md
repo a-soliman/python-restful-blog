@@ -6,7 +6,7 @@
     - Python 3.6
     - Flask
     - Flask-RESTful
-    - SQLLite
+    - SQLLite3
     - Flask-SQLAlchemy
     - OAuth2
     - JWT
