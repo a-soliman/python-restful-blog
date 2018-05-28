@@ -1,6 +1,7 @@
 /* Knockout data binding and templating */
 var viewModel = {
     posts: ko.observableArray(),
+    filteredPosts: ko.observableArray(),
     categories: ko.observableArray(),
     loggedinUser: ko.observable(),
     username: ko.observable(localStorage.getItem('username')),
@@ -205,6 +206,16 @@ var viewModel = {
         }
 
         do_getPosts();
+    },
+
+    filterPosts: (data)=> {
+        const posts = viewModel.posts()
+        const filteredPosts = posts.filter(post => post.category_id == data.id)
+        viewModel.filteredPosts(filteredPosts)
+    },
+
+    clearFilter: () => {
+        viewModel.filteredPosts.removeAll()
     },
 
     // SignUp functions
@@ -629,7 +640,7 @@ function do_addPost(post) {
         }
         response.json().then( ( data ) => {
             viewModel.successMessage(data.message);
-            // viewModel.addMovieLocally(movie);
+            do_getPosts
             console.log(data)
             return true;
         })

@@ -78,9 +78,9 @@
 			<!-- CATEGORIES -->
 			<div class="row categories">
 				<div class="col text-center flex-container">
-					<a href="#" class="btn btn-outline-secondary flex-item" >All</a>
+					<a href="#" class="btn btn-outline-secondary flex-item" data-bind="click: clearFilter" >All</a>
 					<div class="dynamic-categories flex-item flex-container" data-bind="foreach: categories">
-						<a href="#" class="btn btn-outline-secondary flex-item" data-bind="text:name"></a>
+						<a href="#" class="btn btn-outline-secondary flex-item" data-bind="text:name, click: $parent.filterPosts"></a>
 					</div>
 				</div>
 			</div>
@@ -99,7 +99,7 @@
 			<!-- POSTS -->
 			<div class="row posts">
 				<div class="col">
-					<div class="posts-container" data-bind="foreach: posts">
+					<div class="posts-container" data-bind="foreach: posts, visible: !filteredPosts().length">
 						<div class="post mb-5">
 							<h2 class="d-flex">
 								<span  data-bind="text: title"></span>
@@ -120,6 +120,29 @@
 					</div>
 				</div>
 			</div>
+			<div class="row posts">
+					<div class="col">
+						<div class="posts-container" data-bind="foreach: filteredPosts, visible: filteredPosts().length">
+							<div class="post mb-5">
+								<h2 class="d-flex">
+									<span  data-bind="text: title"></span>
+									<span class="ml-auto">
+										<a class="mr-3" 
+											data-bind="visible: owner, click: $parent.setPostToEdit"
+											data-toggle="modal"
+											data-target="#editPostModal">
+												<i class="fa fa-edit"></i>
+										</a>
+										<a  data-bind="visible: owner, click: $parent.removePost">
+											<i class="fa fa-trash"></i>
+										</a>
+									</span>
+								</h2>
+								<p data-bind="html: body"></p>
+							</div>
+						</div>
+					</div>
+				</div>
 		</main>
 
 
