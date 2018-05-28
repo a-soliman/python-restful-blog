@@ -53,7 +53,7 @@ class Post(Resource):
         # get the current user's id
         user_id = current_identity.id
         post = PostModel.find_by_id(id)
-
+        print('here')
         if post is None:
             return {'success': False, 'message': 'Post was not found'}, 404
         

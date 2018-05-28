@@ -104,8 +104,11 @@
 							<h2 class="d-flex">
 								<span  data-bind="text: title"></span>
 								<span class="ml-auto">
-									<a class="mr-3" data-bind="visible: owner">
-										<i class="fa fa-edit"></i>
+									<a class="mr-3" 
+										data-bind="visible: owner, click: $parent.setPostToEdit"
+										data-toggle="modal"
+										data-target="#editPostModal">
+											<i class="fa fa-edit"></i>
 									</a>
 									<a  data-bind="visible: owner, click: $parent.removePost">
 										<i class="fa fa-trash"></i>
@@ -344,6 +347,76 @@
 			</div>
 		</form>
 
+
+		<!-- Edit Post Modal -->
+		<form action="" class="form" data-bind="submit: editPost" >
+				<div class="modal fade" id="editPostModal">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header bg-primary text-white">
+								<h5 class="modal-title">Edit Post</h5>
+								<button class="close btn-white text-white" data-dismiss="modal">
+									<span>&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+									<div class="form-group">
+										<label for="category">Category</label>
+										<select 
+											name="editCategory" 
+											id="editCategory" 
+											class="form-control"
+											data-bind="options: categories, optionsText: 'name', optionsValue: 'id', optionsCaption: 'choose...', value: postToEditInputs.category.value, events: {'blue': validateAddPostInputs.validateCategory}">
+												
+										</select>
+										<!-- VALIDATION ERROR CONTAINER -->
+										<div 
+											class="validation-error alert alert-danger" 
+											data-bind="visible: postToEditInputs.category.valid() === false">
+											Validation Error
+										</div>
+										
+									</div>
+									<div class="form-group">
+											<label for="title">Title</label>
+											<input 
+												type="text" 
+												class="form-control"
+												data-bind="value: postToEditInputs.title.value, valueUpdate: 'afterkeydown', event: {'keyup': validatePostToEditInputs.validateTitle, 'blur': validatePostToEditInputs.validateTitle}"
+											>
+											<!-- VALIDATION ERROR CONTAINER -->
+											<div 
+												class="validation-error alert alert-danger" 
+												data-bind="visible: postToEditInputs.title.valid() === false">
+												Validation Error
+											</div>
+										</div>
+									<div class="form-group">
+										<label for="body">Body</label>
+										<textarea 
+											id="editPostBody"
+											name="editor2"
+											class="form-control"
+											data-bind="value: postToEditInputs.body.value, text: postToEditInputs.body.value, valueUpdate: 'afterkeydown', event: {'keyup': validatePostToEditInputs.validateBody, 'blur': validatePostToEditInputs.validateBody}"
+										>
+										</textarea>
+										<!-- VALIDATION ERROR CONTAINER -->
+										<div 
+											class="validation-error alert alert-danger" 
+											data-bind="visible: postToEditInputs.body.valid() === false">
+											Validation Error, Need 20 chars at least 
+										</div>
+									</div>
+								</div>
+							<div class="modal-footer">
+								<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+								<button class="btn btn-primary" type="submit">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
 	<!-- Body ENDS HERE -->
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/popper.min.js"></script>
@@ -351,7 +424,7 @@
 	<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
 	<script>
 			CKEDITOR.replace( 'editor1' );
-		</script>
+	</script>
 	<script src="./js/knockout-latest.js"></script>
 	<script src="./js/main.js"></script>
 	

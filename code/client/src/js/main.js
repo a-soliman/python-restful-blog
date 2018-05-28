@@ -306,6 +306,115 @@ var viewModel = {
         }
     },
 
+    setPostToEdit: (data, event) => {
+        let inputs = viewModel.postToEditInputs;
+        inputs.id.value(data.id)
+        inputs.category.value(data.category);
+        inputs.title.value(data.title);
+        inputs.body.value(data.body);
+    },
+
+    postToEditInputs: {
+        id: {
+            value: ko.observable('')
+        },
+        category : {
+            value: ko.observable(''),
+            valid: ko.observable()
+        },
+        title : {
+            value: ko.observable(''),
+            valid: ko.observable(true)
+        },
+        body: {
+            value: ko.observable(''),
+            valid: ko.observable(true)
+        }
+    },
+
+    // A SET OF FUNCTIONS TO VALIDATE EACH INPUT FIELD 
+    validatePostToEditInputs: {
+        validateCategory: () => {
+            let category = viewModel.postToEditInputs.category;
+            console.log(category.value())
+            if ( category.value().length > 0 ) {
+                console.log('false: ', category.value())
+                valid.valid(false);
+                return;
+            }
+            category.valid(true);
+            return;
+        },
+        validateTitle: () => {
+            let title = viewModel.postToEditInputs.title;
+
+            if ( title.value().length < 6) {
+                title.valid(false);
+                return;
+            }
+            title.valid(true);
+            return;
+        },
+        validateBody: () => {
+            let body = viewModel.postToEditInputs.body;
+
+            if ( body.value().length < 6){
+                body.valid(false);
+                return
+            }
+            body.valid(true);
+            return;
+        }
+    },
+
+    editPost: () => {
+        const inputs = viewModel.postToEditInputs;
+        const { title, body } = inputs;
+        const elementsArray = [title,body ];
+        
+        // validate the category input
+        let categoryValue = $('#editCategory').val();
+        console.log(categoryValue)
+        
+        // validate category
+        if ( categoryValue.length < 1) {
+            console.log(categoryValue.length)
+            console.log('aborting...')
+            $('#editCategory').css('border', '1px solid red')
+            return false;
+        }
+        else {
+            $('#editCategory').css('border', '1px solid black')
+        }
+
+        // validate title and body
+        for ( let i in elementsArray ){
+            let element = elementsArray[i];
+            if ( element.valid() !== true ) {
+                console.log(element.value())
+                element.valid(false);
+                console.log('here')
+                return;
+            }
+        }
+        let post_id = viewModel.postToEditInputs.id.value()
+        
+        let postToEdit = {
+            id: post_id,
+            category_id: categoryValue,
+            title: title.value(),
+            body:body.value()
+        }
+        console.log(postToEdit)
+        
+        if( do_editPost(postToEdit) ) {
+            // edit the post locally
+            $('.modal').modal('hide');
+            viewModel.successMessage('Edited Post successfully.')
+            //do_getPosts()
+        }
+    },
+
     fetchData: () => {
         if ( localStorage.getItem('access_token') == null) {
             return;
@@ -572,6 +681,38 @@ function do_deletePost(post_id) {
             response.json().then((data) => {
                 console.log(data);
                 viewModel.removePostLocally(post_id)
+                return true;
+            })
+        }
+        else {
+            console.log('weired stuff happend')
+        }
+    })
+}
+
+function do_editPost(post) {
+    fetch(`http://localhost:5555/post/${post.id}`, {
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access_token')}`
+        },
+        method: 'PUT',
+        body: JSON.stringify({category_id: post.category_id, title: post.title, body: post.body})
+    })
+    .then((response) => {
+        if (response.status == 401) {
+            viewModel.failuerMessage('Not Authorized to edit this post.')
+            return false;
+        }
+        else if (response.status === 500) {
+            viewModel.failuerMessage('Something went wrong, please try again later')
+            return false;
+        }
+        else if (response.status === 200) {
+            response.json().then((data) => {
+                do_getPosts()
+                $('.modal').modal('hide');
+                console.log(data);
                 return true;
             })
         }
