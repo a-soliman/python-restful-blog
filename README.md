@@ -36,7 +36,7 @@
     ```bash
     cd blog/
     ```
-1. Install Python virtualenv, and activate it (recomended).
+1. Install and activate [Python virtualenv](https://virtualenv.pypa.io/en/stable/), (recomended).
 1. Install the requirments for SERVER-SIDE
     ```bash
     pip install Flask==1.0.2
@@ -82,10 +82,33 @@
     npm start
     ```
 
-1. open your browser at port 3001 => [http://localhost:3000](http://localhost:3000)
+1. open your browser at port 3000 => [http://localhost:3000](http://localhost:3000)
 
 ----
 ### Directions:
-1. Root page: http://localhost:3001/ 
+1. Root page: http://localhost:3000/ 
     - is where you can view the movies and run the trailers.
 
+----
+# API END-POINTS:
+## USER
+- ### GET /users
+- ### GET /user/<string:email>
+- ### GET /user_id/<string:id>
+- ### POST /user/register
+- ### DEL /user/<string:email>
+## POST
+- ### GET /posts
+- ### GET /post/<string:id>
+- ### POST /post/add
+- ### DEL /post/<string:id>
+
+## Category
+- ### GET /categories
+- ### GET /category/<string:name>
+- ### POST /category/<string:name>
+- ### DEL /category/<string:name>
+
+## Login & Authentication
+- ### POST /login
+- ### GET /auth
