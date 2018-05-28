@@ -224,10 +224,13 @@ var viewModel = {
         }
         
         //validate body
-        if (bodyValue.length < 10) {
+        if (bodyValue.length < 20) {
             console.log('need over 10 chars for post body');
             $("#addPostBody").css('border', '1px solid red')
+            inputs.body.valid(false)
             return false
+        } else {
+            inputs.body.valid(true)
         }
 
         // validate title
