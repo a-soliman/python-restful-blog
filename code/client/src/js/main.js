@@ -301,6 +301,20 @@ var viewModel = {
     removeDataFromView: () => {
         viewModel.posts.removeAll()
         viewModel.categories.removeAll()
+    },
+
+    removePost: (data) => {
+        let post_id = data.id;
+        if (do_deletePost(post_id)) {
+            console.log('removed from the server')
+            
+        }
+    },
+
+    removePostLocally: (post_id) => {
+        viewModel.posts.remove(function (item) {
+            return item.id == post_id;
+        });
     }
 
     /* END */
@@ -476,6 +490,35 @@ function do_getPosts() {
         .catch( function( err ) {
             console.log('Fetch Error :-S', err);
         })
+}
+
+function do_deletePost(post_id) {
+    fetch(`http://localhost:5555/post/${post_id}`, {
+        headers: {
+            'Authorization': `JWT ${localStorage.getItem('access_token')}`
+        },
+        method: 'DELETE'
+    })
+    .then((response) => {
+        if (response.status == 401) {
+            viewModel.failuerMessage('Not Authorized to remove this post.')
+            return false;
+        }
+        else if (response.status === 500) {
+            viewModel.failuerMessage('Something went wrong, please try again later')
+            return false;
+        }
+        else if (response.status === 200) {
+            response.json().then((data) => {
+                console.log(data);
+                viewModel.removePostLocally(post_id)
+                return true;
+            })
+        }
+        else {
+            console.log('weired stuff happend')
+        }
+    })
 }
 // APPLYES THE KNOCKOUT BINDINGS
 ko.applyBindings(viewModel)
