@@ -45,7 +45,4 @@ class UserModel(db.Model):
         db.session.delete(self)
         db.session.commit()
         return
-    
-ahmed = UserModel(1, 'Ahmed', '123456', 'ahmed@mail.com')
 
-users = [ahmed]

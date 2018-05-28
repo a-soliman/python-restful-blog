@@ -5,7 +5,7 @@ import datetime
 
 from security import authenticate, identity
 from resources.login import Login # this is where the OUATH functionality come from.
-from resources.user import User, RegisterUser, ListUsers
+from resources.user import User, UserInformation, RegisterUser, ListUsers
 from resources.post import Post, AddPost, ListPosts
 from resources.category import Category, CategoryList
 
@@ -50,6 +50,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api.add_resource(Login, '/login')
 api.add_resource(ListUsers, '/users')
 api.add_resource(User, '/user/<string:email>')
+api.add_resource(UserInformation, '/user_id/<string:id>')
 api.add_resource(RegisterUser, '/user/register')
 
 api.add_resource(ListPosts, '/posts')

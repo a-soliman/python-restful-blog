@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import JWT, jwt_required
+from flask_jwt import JWT, jwt_required, current_identity
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -26,6 +26,21 @@ class User(Resource):
         except:
             return {'success': False, 'message': 'Something went wrong.'}, 500
         return {'success': True, 'message': 'User removed successfully.'}, 200
+
+
+class UserInformation(Resource):
+    @jwt_required()
+    def get(self, id):
+        print('identent ', current_identity.id)
+        print('id: ', id)
+        if str(current_identity.id) != id:
+            return {'success': False, 'message': 'Not Authorized'}, 401
+
+        user = UserModel.find_by_id(id)
+
+        if user is None:
+            return {'success': False, 'message': 'User not found'}, 404
+        return user.json(), 400
 
 class ListUsers(Resource):
     def get(self):
