@@ -3,6 +3,7 @@ var viewModel = {
     posts: ko.observableArray(),
     categories: ko.observableArray(),
     loggedinUser: ko.observable(),
+    username: ko.observable(localStorage.getItem('username')),
     successMessage: ko.observable(),
     failuerMessage: ko.observable(),
 
@@ -167,8 +168,11 @@ var viewModel = {
     signout: () => {
         // clear the access_token from local storage
         localStorage.removeItem('access_token')
+        localStorage.removeItem('username')
         viewModel.removeDataFromView()
         viewModel.loggedinUser(false)
+        viewModel.username('')
+
     },
 
     getCategories: () => {
@@ -343,8 +347,10 @@ function do_signin(user) {
     .then( ( response ) => {
         if (response.status === 200) {
             response.json().then( ( data ) => {
+                console.log('signin data: ', data)
                 let access_token = data.access_token;
                 viewModel.saveAccessToken(access_token);
+                getUserInfo(data.user_id);
                 // signal that a user is in
                 viewModel.loggedinUser(true)
                 
@@ -373,6 +379,48 @@ function do_signin(user) {
         
     })
 };
+
+function getUserInfo(user_id) {
+    console.log('getting user information...', user_id)
+    console.log('access: token: ', localStorage.getItem('access_token'))
+    fetch(`http://localhost:5555/user_id/${user_id}`, {
+        cache: 'no-cache',
+        headers: {
+            'authorization': `JWT ${localStorage.getItem('access_token')}`
+        },
+        method: 'GET'
+    })
+    .then( ( response ) => {
+        if (response.status === 200) {
+            response.json().then( ( data ) => {
+                console.log(data)
+                // set the user username to the localStorage
+                localStorage.setItem('username', data.username)
+                viewModel.username(data.username)
+                return true
+            })
+        }
+        else if ( response.status === 401 ) {
+            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            response.json().then( ( data ) => {
+                console.log(data)
+                let message = `${data.description}, Please try again!`
+                viewModel.failuerMessage(data.description)
+                return false;
+            })
+        }
+        else if ( response.status === 500 ) {
+            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            response.json().then( ( data ) => {
+                console.log(data)
+                let message = `server error, Please try again later!`
+                viewModel.failuerMessage(data.description)
+                return false;
+            })
+        }
+        
+    })
+}
 
 function do_signup(user) {
     return fetch(`http://localhost:5555/user/register`, {
