@@ -80,9 +80,7 @@ var viewModel = {
 
     // A function to handle and store the access_token
     saveAccessToken: (access_token) => {
-        console.log('recived access token');
         localStorage.setItem('access_token', access_token);
-        console.log('from localStorage', localStorage.getItem('access_token'));
         viewModel.fetchData()
 
     },
@@ -180,7 +178,7 @@ var viewModel = {
         fetch('http://localhost:5555/categories')
         .then( function(response) {
             if (response.status !== 200 ) {
-                console.log('Looks like the backend server is not running on port 5000. ' + response.status);
+                console.log('Looks like the backend server is not running on port 5555. ' + response.status);
                 response.json().then( ( data ) => {
                     viewModel.failuerMessage(data.message)
                 })
@@ -190,7 +188,6 @@ var viewModel = {
 
                 //append the movies to the viewModel
                 viewModel.categories(data.categories)
-                console.log(data)
             })
         })
         .catch( function( err ) {
@@ -199,9 +196,7 @@ var viewModel = {
     },
 
     getPosts: () => {
-        console.log('getPosts called')
         if (localStorage.getItem('access_token') == null) {
-            console.log('getPosts called, NO access toke... aborting')
             return;
         }
 
@@ -236,8 +231,7 @@ var viewModel = {
         
         //validate body
         if (bodyValue.length < 20) {
-            console.log('need over 10 chars for post body');
-            $("#addPostBody").css('border', '1px solid red')
+            $("#addPostBody").css('border', '1px solid red');
             inputs.body.valid(false)
             return false
         } else {
@@ -290,9 +284,7 @@ var viewModel = {
     validateAddPostInputs: {
         validateCategory: () => {
             let category = viewModel.addPostInputs.category;
-            console.log(category.value())
             if ( category.value().length > 0 ) {
-                console.log('false: ', category.value())
                 valid.valid(false);
                 return;
             }
@@ -351,9 +343,7 @@ var viewModel = {
     validatePostToEditInputs: {
         validateCategory: () => {
             let category = viewModel.postToEditInputs.category;
-            console.log(category.value())
             if ( category.value().length > 0 ) {
-                console.log('false: ', category.value())
                 valid.valid(false);
                 return;
             }
@@ -393,7 +383,6 @@ var viewModel = {
         
         // validate category
         if ( categoryValue.length < 1) {
-            console.log(categoryValue.length)
             console.log('aborting...')
             $('#editCategory').css('border', '1px solid red')
             return false;
@@ -406,9 +395,7 @@ var viewModel = {
         for ( let i in elementsArray ){
             let element = elementsArray[i];
             if ( element.valid() !== true ) {
-                console.log(element.value())
                 element.valid(false);
-                console.log('here')
                 return;
             }
         }
@@ -420,7 +407,6 @@ var viewModel = {
             title: title.value(),
             body:body.value()
         }
-        console.log(postToEdit)
         
         if( do_editPost(postToEdit) ) {
             // edit the post locally
@@ -446,7 +432,6 @@ var viewModel = {
     removePost: (data) => {
         let post_id = data.id;
         if (do_deletePost(post_id)) {
-            console.log('removed from the server')
             
         }
     },
@@ -483,7 +468,6 @@ function do_signin(user) {
     .then( ( response ) => {
         if (response.status === 200) {
             response.json().then( ( data ) => {
-                console.log('signin data: ', data)
                 let access_token = data.access_token;
                 viewModel.saveAccessToken(access_token);
                 getUserInfo(data.user_id);
@@ -497,7 +481,6 @@ function do_signin(user) {
         else if ( response.status === 401 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                console.log(data)
                 let message = `${data.description}, Please try again!`
                 viewModel.failuerMessage(data.description)
                 return false;
@@ -517,8 +500,6 @@ function do_signin(user) {
 };
 
 function getUserInfo(user_id) {
-    console.log('getting user information...', user_id)
-    console.log('access: token: ', localStorage.getItem('access_token'))
     fetch(`http://localhost:5555/user_id/${user_id}`, {
         cache: 'no-cache',
         headers: {
@@ -539,7 +520,6 @@ function getUserInfo(user_id) {
         else if ( response.status === 401 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                console.log(data)
                 let message = `${data.description}, Please try again!`
                 viewModel.failuerMessage(data.description)
                 return false;
@@ -548,7 +528,6 @@ function getUserInfo(user_id) {
         else if ( response.status === 500 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                console.log(data)
                 let message = `server error, Please try again later!`
                 viewModel.failuerMessage(data.description)
                 return false;
@@ -577,7 +556,6 @@ function do_signup(user) {
         else if ( response.status === 401 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                console.log(data)
                 let message = `${data.description}, Please try again!`
                 viewModel.failuerMessage(data.description)
                 return false;
@@ -586,7 +564,6 @@ function do_signup(user) {
         else if ( response.status === 500 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                console.log(data)
                 let message = `server error, Please try again later!`
                 viewModel.failuerMessage(data.description)
                 return false;
@@ -600,9 +577,6 @@ function do_signup(user) {
 
 function GsignInCallback(authResult) {
     const data = {code: authResult['code']}
-    console.log(JSON.stringify(data))
-    
-    console.log('before: ', JSON.stringify(data))
     fetch("http://localhost:5555/login", {
         method: 'POST',
         
@@ -621,7 +595,6 @@ function GsignInCallback(authResult) {
         
     })
 
-    console.log('Gconnect called')
 }
 
 function do_addPost(post) {
@@ -659,14 +632,13 @@ function do_getPosts() {
     })
         .then( function(response) {
             if (response.status !== 200 ) {
-                console.log('Looks like the backend server is not running on port 5000. ' + response.status);
+                console.log('Looks like the backend server is not running on port 5555. ' + response.status);
                 response.json().then( ( data ) => {
                     viewModel.failuerMessage(data.message)
                 })
                 return
             }
             response.json().then(function(data) {
-                console.log(data)
                 //append the movies to the viewModel
                 viewModel.posts(data.posts)
                 viewModel.posts.reverse()
