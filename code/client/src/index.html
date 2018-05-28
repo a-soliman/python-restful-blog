@@ -112,7 +112,7 @@
 									</a>
 								</span>
 							</h2>
-							<p data-bind="text: body"></p>
+							<p data-bind="html: body"></p>
 						</div>
 					</div>
 				</div>
@@ -320,11 +320,13 @@
 									</div>
 								<div class="form-group">
 									<label for="body">Body</label>
-									<input 
-										type="text" 
+									<textarea 
+										id="addPostBody"
+										name="editor1"
 										class="form-control"
 										data-bind="value: addPostInputs.body.value, valueUpdate: 'afterkeydown', event: {'keyup': validateAddPostInputs.validateBody, 'blur': validateAddPostInputs.validateBody}"
 									>
+									</textarea>
 									<!-- VALIDATION ERROR CONTAINER -->
 									<div 
 										class="validation-error alert alert-danger" 
@@ -346,7 +348,13 @@
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/popper.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
+	<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
+	<script>
+			CKEDITOR.replace( 'editor1' );
+		</script>
 	<script src="./js/knockout-latest.js"></script>
 	<script src="./js/main.js"></script>
+	
+	
 </body>
 </html>

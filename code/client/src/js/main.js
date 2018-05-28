@@ -210,18 +210,27 @@ var viewModel = {
     // SignUp functions
     addPost: () => {
         const inputs = viewModel.addPostInputs;
-        const { title, body } = inputs;
-        const elementsArray = [title, body ];
+        const { title } = inputs;
+        const elementsArray = [title ];
         
         // validate the category input
         let categoryValue = $('#category').val();
-        console.log(categoryValue)
+        let bodyValue = CKEDITOR.instances['addPostBody'].getData()
+        
+        // validate category
         if ( categoryValue.length < 1) {
             console.log('aborting...')
             return false;
         }
+        
+        //validate body
+        if (bodyValue.length < 10) {
+            console.log('need over 10 chars for post body');
+            $("#addPostBody").css('border', '1px solid red')
+            return false
+        }
 
-
+        // validate title
         for ( let i in elementsArray ){
             let element = elementsArray[i];
             if ( element.valid() !== true ) {
@@ -233,7 +242,7 @@ var viewModel = {
         let newPost = {
             category_id: categoryValue,
             title: title.value(),
-            body: body.value()
+            body:bodyValue
         }
         
         if( do_addPost(newPost) ) {
@@ -285,10 +294,10 @@ var viewModel = {
         validateBody: () => {
             let body = viewModel.addPostInputs.body;
 
-            if ( body.value().length < 6){
-                body.valid(false);
-                return
-            }
+            // if ( body.value().length < 6){
+            //     body.valid(false);
+            //     return
+            // }
             body.valid(true);
             return;
         }
