@@ -261,6 +261,9 @@ var viewModel = {
         
         if( do_addPost(newPost) ) {
             // Add the post locally
+            bodyValue = ''
+            title.value('')
+
             $('.modal').modal('hide');
             viewModel.getPosts()
             viewModel.successMessage('Added Post successfully.')
