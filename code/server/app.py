@@ -4,7 +4,9 @@ from flask_jwt import JWT, jwt_required
 import datetime
 
 from security import authenticate, identity
-from resources.login import Login # this is where the OUATH functionality come from.
+
+# resources
+from resources.login import Login  # google oauth
 from resources.user import User, UserInformation, RegisterUser, ListUsers
 from resources.post import Post, AddPost, ListPosts
 from resources.category import Category, CategoryList
@@ -12,13 +14,15 @@ from resources.category import Category, CategoryList
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 
+
 # SQLAlchemy to create all the necesiry tables before start
 @app.before_first_request
 def create_tables():
     print('Creating tables')
     db.create_all()
-    
-#Allows Origin for the front end to interact.
+
+
+# Allows Origin for the front end to interact.
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -32,9 +36,7 @@ app.secret_key = 'super_secret_key'
 # config JWT to expire within half an hour
 app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(days=365)
 app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-jwt = JWT(app, authenticate, identity) #created /auth
-
-
+jwt = JWT(app, authenticate, identity)  # created /auth
 
 
 @jwt.auth_response_handler
@@ -63,5 +65,4 @@ api.add_resource(Category, '/category/<string:name>')
 if __name__ == '__main__':
     from db import db
     db.init_app(app)
-    
     app.run(port=5555, debug=True)

@@ -1,14 +1,18 @@
-import sqlite3
-
 from db import db
 
+
 class PostModel(db.Model):
+    '''
+    THIS CLASS CONTAINS ALL THE FUNCTION NEEDED TO
+    CREAT, EDIT DELETE AND ADD POST
+    '''
+
     __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.String(2000))
-    user= db.Column(db.Integer)
+    user = db.Column(db.Integer)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     category = db.relationship('CategoryModel')
 
@@ -33,11 +37,11 @@ class PostModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
-    
+
     @classmethod
     def find_by_userid(cls, user_id):
         return cls.query.filter_by(user=user_id).all()
-    
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

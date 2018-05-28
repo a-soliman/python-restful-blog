@@ -9,55 +9,71 @@ from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 import httplib2
 import json
 import requests
-import random, string
+import random
+import string
 
 from models.user import UserModel
 import security
 
-
 # refrencing the client secret file
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-    
+
+
 class Login(Resource):
     def post(self):
         data = request.data
         args = json.loads(data)
 
-        #check if data were passed
+        # check if data were passed
         if args['code'] is None:
-            return {'success': False, 'Message': 'Invalid request.'}, 400
+            return {
+                'success': False,
+                'Message': 'Invalid request.'
+                }, 400
 
         # Collect the login data
         code = args['code']
 
         try:
-            #upgrade the authorization code into a credentials object
+            # upgrade the authorization code into a credentials object
             oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
             oauth_flow.redirect_uri = 'postmessage'
             credentials = oauth_flow.step2_exchange(code)
             access_token = credentials.access_token
-    
+
         except FlowExchangeError:
-            return {'Success': False, 'Message': 'Faild to upgrade the authorization code.'}, 401
-        
-        #Check that the access token is valid
+            return {
+                'Success': False,
+                'Message': 'Faild to upgrade the authorization code.'
+                }, 401
+
+        # Check that the access token is valid
         url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'.format(access_token))
         h = httplib2.Http()
         result = json.loads(h.request(url, 'GET')[1])
-        
+
         # if there was an error in the access token info, abort
         if result.get('error') is not None:
-            return {'Sucess': False, 'Message': result.get('error')}, 500
+            return {
+                'Sucess': False,
+                'Message': result.get('error')
+                }, 500
 
         # Verify that the access token is used for the intended user
         gplus_id = credentials.id_token['sub']
         if result['user_id'] != gplus_id:
-            return {'Success': False, 'Message': "Token's user ID dosn't match given user ID."}, 401
+            return {
+                'Success': False,
+                'Message': "Token's user ID dosn't match given user ID."
+                }, 401
 
         # Verify that the access token is valid for this app
         if result['issued_to'] != CLIENT_ID:
-            return {'Success': False, 'Message': "Token's client ID does not match app's"}, 401
+            return {
+                'Success': False,
+                'Message': "Token's client ID does not match app's"
+                }, 401
 
         # Store the access Token in the session for later use
         Login.stored_access_token = access_token
@@ -84,4 +100,3 @@ class Login(Resource):
             user.save_to_db()
 
         return user.json()
-       

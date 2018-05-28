@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from models.user import UserModel
 
+
 class User(Resource):
     def get(self, email):
         user = UserModel.find_by_email(email)
@@ -13,13 +14,13 @@ class User(Resource):
         if user is None:
             return {'success': False, 'message': 'User not found'}, 404
         return user.json(), 400
-    
+
     def delete(self, email):
         user = UserModel.find_by_email(email)
 
         if user is None:
             return {'success': False, 'message': 'User not found.'}, 404
-        
+
         # try deleting the user
         try:
             user.delete_from_db()
@@ -42,37 +43,25 @@ class UserInformation(Resource):
             return {'success': False, 'message': 'User not found'}, 404
         return user.json(), 200
 
+
 class ListUsers(Resource):
     def get(self):
         return {'users': [user.json() for user in UserModel.query.all()]}
-        
+
 
 class RegisterUser(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('username',
-        type = str,
-        required = True,
-        help = 'username is required.'  
-    )
-    
-    parser.add_argument('password', 
-        type = str,
-        required = True,
-        help = 'password is required.'
-    )
+    parser.add_argument('username', type=str, required=True, help='username is required.')
+    parser.add_argument('password', type=str, required=True, help='password is required.')
+    parser.add_argument('email', type=str, required=True, help='email is required.')
 
-    parser.add_argument('email', 
-        type = str,
-        required = True,
-        help = 'email is required.'
-    )
     def post(self):
         data = RegisterUser.parser.parse_args()
 
         # check if the user's email already exists in the DB
         if UserModel.find_by_email(data['email']):
             return {'success': False, 'message': 'a user with the provided email already exists'}
-        
+
         # Hash the password
         pw_hash = generate_password_hash(data['password'])
         user = UserModel(None, data['username'], pw_hash, data['email'])
