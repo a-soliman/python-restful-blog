@@ -100,14 +100,16 @@
 				<div class="col">
 					<div class="posts-container" data-bind="foreach: posts">
 						<div class="post">
-							<h2 >
-								<span data-bind="text: title"></span>
-								<a data-bind="visible: owner">
-									<i class="fa fa-edit"></i>
-								</a>
-								<a data-bind="visible: owner">
-									<i class="fa fa-trash"></i>
-								</a>
+							<h2 class="d-flex">
+								<span  data-bind="text: title"></span>
+								<span class="ml-auto">
+									<a class="mr-3" data-bind="visible: owner">
+										<i class="fa fa-edit"></i>
+									</a>
+									<a  data-bind="visible: owner">
+										<i class="fa fa-trash"></i>
+									</a>
+								</span>
 							</h2>
 							<p data-bind="text: body"></p>
 						</div>
