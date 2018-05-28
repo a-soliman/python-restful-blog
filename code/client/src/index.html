@@ -94,6 +94,26 @@
 						>Add Post</button>
 				</div>
 			</div>
+
+			<!-- POSTS -->
+			<div class="row posts">
+				<div class="col">
+					<div class="posts-container" data-bind="foreach: posts">
+						<div class="post">
+							<h2 >
+								<span data-bind="text: title"></span>
+								<a data-bind="visible: owner">
+									<i class="fa fa-edit"></i>
+								</a>
+								<a data-bind="visible: owner">
+									<i class="fa fa-trash"></i>
+								</a>
+							</h2>
+							<p data-bind="text: body"></p>
+						</div>
+					</div>
+				</div>
+			</div>
 		</main>
 
 
