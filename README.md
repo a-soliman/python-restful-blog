@@ -10,6 +10,7 @@
     - Flask-SQLAlchemy
     - OAuth2
     - JWT
+    - werkzeug.security (for hashing passwords).
 
 1. Client Side
     - KnockOut.js
