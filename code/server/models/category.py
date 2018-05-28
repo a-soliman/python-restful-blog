@@ -4,6 +4,9 @@ from db import db
 class CategoryModel(db.Model):
     '''
     THIS CLASS CONTAINS ALL THE FUNCTION NEEDED TO CREAT, EDIT DELETE CATEGORY
+    ARGS: 
+        id: int
+        name: string
     '''
     __tablename__ = 'categories'
 

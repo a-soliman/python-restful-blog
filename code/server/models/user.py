@@ -5,6 +5,12 @@ class UserModel(db.Model):
     '''
     THIS CLASS CONTAINS ALL THE FUNCTION NEEDED TO
     CREAT, EDIT DELETE AND ADD USER
+
+    Args:
+    _id: int
+    username: string
+    password: string,
+    email: string
     '''
     __tablename__ = 'users'
 

@@ -5,6 +5,14 @@ class PostModel(db.Model):
     '''
     THIS CLASS CONTAINS ALL THE FUNCTION NEEDED TO
     CREAT, EDIT DELETE AND ADD POST
+
+    Args: 
+        _id: int
+        title: string
+        body: string
+        user: int => reference to the user's_id
+        category_id: int => reference to the category's id (Foreign key)
+        owner: DO NOT SET THIS VALUE WHILE INSERTING, IT WILL CHANGE AFTER CHECKING THE ACCESS TOKEN.
     '''
 
     __tablename__ = 'posts'
