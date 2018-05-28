@@ -510,7 +510,6 @@ function getUserInfo(user_id) {
     .then( ( response ) => {
         if (response.status === 200) {
             response.json().then( ( data ) => {
-                console.log(data)
                 // set the user username to the localStorage
                 localStorage.setItem('username', data.username)
                 viewModel.username(data.username)
@@ -711,5 +710,3 @@ function do_editPost(post) {
 }
 // APPLYES THE KNOCKOUT BINDINGS
 ko.applyBindings(viewModel)
-
-
