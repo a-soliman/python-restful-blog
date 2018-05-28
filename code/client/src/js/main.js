@@ -262,6 +262,7 @@ var viewModel = {
         if( do_addPost(newPost) ) {
             // Add the post locally
             $('.modal').modal('hide');
+            viewModel.getPosts()
             viewModel.successMessage('Added Post successfully.')
         }
     },
@@ -665,6 +666,7 @@ function do_getPosts() {
                 console.log(data)
                 //append the movies to the viewModel
                 viewModel.posts(data.posts)
+                viewModel.posts.reverse()
             })
         })
         .catch( function( err ) {
