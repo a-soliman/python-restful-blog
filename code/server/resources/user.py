@@ -40,7 +40,7 @@ class UserInformation(Resource):
 
         if user is None:
             return {'success': False, 'message': 'User not found'}, 404
-        return user.json(), 400
+        return user.json(), 200
 
 class ListUsers(Resource):
     def get(self):
