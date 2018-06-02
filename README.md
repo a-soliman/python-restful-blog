@@ -42,7 +42,6 @@
     ```bash
     pip install Flask==1.0.2
     pip install Flask-RESTful==0.3.6
-    pip install Py-Mongo==2.8
     pip install Flask-JWT==0.3.2
     pip install Flask-SQLAlchemy==2.3.2
     pip install httplib2==0.11.3
