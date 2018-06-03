@@ -10,10 +10,10 @@ var viewModel = {
 
     checkLoggedinUser: () => {
         if (localStorage.getItem('access_token') != null) {
-            viewModel.loggedinUser(true)
+            viewModel.loggedinUser(true);
         }
         else {
-            viewModel.loggedinUser(false)
+            viewModel.loggedinUser(false);
         }
     },
 
@@ -38,7 +38,7 @@ var viewModel = {
             
             // clear the modal form and hide it
             $('.modal').modal('hide');
-            viewModel.fetchData()
+            viewModel.fetchData();
         }
     },
 
@@ -71,7 +71,7 @@ var viewModel = {
 
             if ( password.value().length < 6 || password.value().indexOf(' ') != -1){
                 password.valid(false);
-                return
+                return;
             }
             password.valid(true);
             return;
@@ -81,7 +81,7 @@ var viewModel = {
     // A function to handle and store the access_token
     saveAccessToken: (access_token) => {
         localStorage.setItem('access_token', access_token);
-        viewModel.fetchData()
+        viewModel.fetchData();
 
     },
     
@@ -103,13 +103,13 @@ var viewModel = {
             username: username.value(),
             password: password.value(),
             email: email.value()
-        }
+        };
         
         if( do_signup(user) ) {
             //sign the user in
-            let userToLogin = {'email': user.email, 'password': user.password}
+            let userToLogin = {'email': user.email, 'password': user.password};
             $('.modal').modal('hide');
-            viewModel.successMessage('You are now digned up, and can login..')
+            viewModel.successMessage('You are now digned up, and can login..');
         }
     },
 
@@ -156,7 +156,7 @@ var viewModel = {
 
             if ( password.value().length < 6 || password.value().indexOf(' ') != -1){
                 password.valid(false);
-                return
+                return;
             }
             password.valid(true);
             return;
@@ -166,11 +166,11 @@ var viewModel = {
     // Signout
     signout: () => {
         // clear the access_token from local storage
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('username')
-        viewModel.removeDataFromView()
-        viewModel.loggedinUser(false)
-        viewModel.username('')
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('username');
+        viewModel.removeDataFromView();
+        viewModel.loggedinUser(false);
+        viewModel.username('');
 
     },
 
@@ -180,19 +180,19 @@ var viewModel = {
             if (response.status !== 200 ) {
                 console.log('Looks like the backend server is not running on port 5555. ' + response.status);
                 response.json().then( ( data ) => {
-                    viewModel.failuerMessage(data.message)
-                })
-                return
+                    viewModel.failuerMessage(data.message);
+                });
+                return;
             }
             response.json().then(function(data) {
 
                 //append the movies to the viewModel
-                viewModel.categories(data.categories)
-            })
+                viewModel.categories(data.categories);
+            });
         })
         .catch( function( err ) {
             console.log('Fetch Error :-S', err);
-        })
+        });
     },
 
     getPosts: () => {
@@ -204,13 +204,13 @@ var viewModel = {
     },
 
     filterPosts: (data)=> {
-        const posts = viewModel.posts()
-        const filteredPosts = posts.filter(post => post.category_id == data.id)
-        viewModel.filteredPosts(filteredPosts)
+        const posts = viewModel.posts();
+        const filteredPosts = posts.filter(post => post.category_id == data.id);
+        viewModel.filteredPosts(filteredPosts);
     },
 
     clearFilter: () => {
-        viewModel.filteredPosts.removeAll()
+        viewModel.filteredPosts.removeAll();
     },
 
     // SignUp functions
@@ -221,21 +221,21 @@ var viewModel = {
         
         // validate the category input
         let categoryValue = $('#category').val();
-        let bodyValue = CKEDITOR.instances['addPostBody'].getData()
+        let bodyValue = CKEDITOR.instances['addPostBody'].getData();
         
         // validate category
         if ( categoryValue.length < 1) {
-            console.log('aborting...')
+            console.log('aborting...');
             return false;
         }
         
         //validate body
         if (bodyValue.length < 20) {
             $("#addPostBody").css('border', '1px solid red');
-            inputs.body.valid(false)
-            return false
+            inputs.body.valid(false);
+            return false;
         } else {
-            inputs.body.valid(true)
+            inputs.body.valid(true);
         }
 
         // validate title
@@ -251,16 +251,16 @@ var viewModel = {
             category_id: categoryValue,
             title: title.value(),
             body:bodyValue
-        }
+        };
         
         if( do_addPost(newPost) ) {
             // Add the post locally
-            bodyValue = ''
-            title.value('')
+            bodyValue = '';
+            title.value('');
 
             $('.modal').modal('hide');
-            viewModel.getPosts()
-            viewModel.successMessage('Added Post successfully.')
+            viewModel.getPosts();
+            viewModel.successMessage('Added Post successfully.');
         }
     },
 
@@ -303,11 +303,6 @@ var viewModel = {
         },
         validateBody: () => {
             let body = viewModel.addPostInputs.body;
-
-            // if ( body.value().length < 6){
-            //     body.valid(false);
-            //     return
-            // }
             body.valid(true);
             return;
         }
@@ -315,7 +310,7 @@ var viewModel = {
 
     setPostToEdit: (data, event) => {
         let inputs = viewModel.postToEditInputs;
-        inputs.id.value(data.id)
+        inputs.id.value(data.id);
         inputs.category.value(data.category);
         inputs.title.value(data.title);
         inputs.body.value(data.body);
@@ -365,7 +360,7 @@ var viewModel = {
 
             if ( body.value().length < 6){
                 body.valid(false);
-                return
+                return;
             }
             body.valid(true);
             return;
@@ -375,20 +370,20 @@ var viewModel = {
     editPost: () => {
         const inputs = viewModel.postToEditInputs;
         const { title, body } = inputs;
-        const elementsArray = [title,body ];
+        const elementsArray = [title,body];
         
         // validate the category input
         let categoryValue = $('#editCategory').val();
-        console.log(categoryValue)
+        console.log(categoryValue);
         
         // validate category
         if ( categoryValue.length < 1) {
-            console.log('aborting...')
-            $('#editCategory').css('border', '1px solid red')
+            console.log('aborting...');
+            $('#editCategory').css('border', '1px solid red');
             return false;
         }
         else {
-            $('#editCategory').css('border', '1px solid black')
+            $('#editCategory').css('border', '1px solid black');
         }
 
         // validate title and body
@@ -399,20 +394,19 @@ var viewModel = {
                 return;
             }
         }
-        let post_id = viewModel.postToEditInputs.id.value()
+        let post_id = viewModel.postToEditInputs.id.value();
         
         let postToEdit = {
             id: post_id,
             category_id: categoryValue,
             title: title.value(),
             body:body.value()
-        }
+        };
         
         if( do_editPost(postToEdit) ) {
             // edit the post locally
             $('.modal').modal('hide');
-            viewModel.successMessage('Edited Post successfully.')
-            //do_getPosts()
+            viewModel.successMessage('Edited Post successfully.');
         }
     },
 
@@ -420,20 +414,18 @@ var viewModel = {
         if ( localStorage.getItem('access_token') == null) {
             return;
         }
-        viewModel.getCategories()
-        viewModel.getPosts()
+        viewModel.getCategories();
+        viewModel.getPosts();
     },
 
     removeDataFromView: () => {
-        viewModel.posts.removeAll()
-        viewModel.categories.removeAll()
+        viewModel.posts.removeAll();
+        viewModel.categories.removeAll();
     },
 
     removePost: (data) => {
         let post_id = data.id;
-        if (do_deletePost(post_id)) {
-            
-        }
+        do_deletePost(post_id);
     },
 
     removePostLocally: (post_id) => {
@@ -442,12 +434,8 @@ var viewModel = {
         });
     }
 
-    /* END */
-
-    
-
-    
-}
+    /* END */   
+};
 
 /* 
     THE NEXT SET OF METHODS ARE THE ACTUAL API CALLS 
@@ -472,32 +460,32 @@ function do_signin(user) {
                 viewModel.saveAccessToken(access_token);
                 getUserInfo(data.user_id);
                 // signal that a user is in
-                viewModel.loggedinUser(true)
+                viewModel.loggedinUser(true);
                 
                 viewModel.successMessage('You are now loggedIn successfully!');
                 return true;
-            })
+            });
         }
         else if ( response.status === 401 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                let message = `${data.description}, Please try again!`
-                viewModel.failuerMessage(data.description)
+                let message = `${data.description}, Please try again!`;
+                viewModel.failuerMessage(data.description);
                 return false;
             })
         }
         else if ( response.status === 500 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                console.log(data)
-                let message = `server error, Please try again later!`
-                viewModel.failuerMessage(data.description)
+                console.log(data);
+                let message = `server error, Please try again later!`;
+                viewModel.failuerMessage(data.description);
                 return false;
-            })
+            });
         }
         
-    })
-};
+    });
+}
 
 function getUserInfo(user_id) {
     fetch(`http://localhost:5555/user_id/${user_id}`, {
@@ -511,29 +499,29 @@ function getUserInfo(user_id) {
         if (response.status === 200) {
             response.json().then( ( data ) => {
                 // set the user username to the localStorage
-                localStorage.setItem('username', data.username)
-                viewModel.username(data.username)
-                return true
+                localStorage.setItem('username', data.username);
+                viewModel.username(data.username);
+                return true;
             })
         }
         else if ( response.status === 401 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                let message = `${data.description}, Please try again!`
-                viewModel.failuerMessage(data.description)
+                let message = `${data.description}, Please try again!`;
+                viewModel.failuerMessage(data.description);
                 return false;
             })
         }
         else if ( response.status === 500 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                let message = `server error, Please try again later!`
-                viewModel.failuerMessage(data.description)
+                let message = `server error, Please try again later!`;
+                viewModel.failuerMessage(data.description);
                 return false;
-            })
+            });
         }
         
-    })
+    });
 }
 
 function do_signup(user) {
@@ -555,16 +543,16 @@ function do_signup(user) {
         else if ( response.status === 401 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                let message = `${data.description}, Please try again!`
-                viewModel.failuerMessage(data.description)
+                let message = `${data.description}, Please try again!`;
+                viewModel.failuerMessage(data.description);
                 return false;
             })
         }
         else if ( response.status === 500 ) {
             console.log('Looks like the backend server is not running on port 5555. ' + response.status);
             response.json().then( ( data ) => {
-                let message = `server error, Please try again later!`
-                viewModel.failuerMessage(data.description)
+                let message = `server error, Please try again later!`;
+                viewModel.failuerMessage(data.description);
                 return false;
             })
         }
@@ -575,7 +563,7 @@ function do_signup(user) {
 
 
 function GsignInCallback(authResult) {
-    const data = {code: authResult['code']}
+    const data = {code: authResult['code']};
     fetch("http://localhost:5555/login", {
         method: 'POST',
         
@@ -587,7 +575,7 @@ function GsignInCallback(authResult) {
         cache: 'no-cache',
     })
     .then( ( response ) => {
-        return response.json()
+        return response.json();
     }).then( ( data ) => {
         do_signin({'email': data.email, 'password': 'default_password'});
         $('.modal').modal('hide');
@@ -616,11 +604,10 @@ function do_addPost(post) {
         }
         response.json().then( ( data ) => {
             viewModel.successMessage(data.message);
-            do_getPosts
-            console.log(data)
+            do_getPosts();
             return true;
-        })
-    })
+        });
+    });
 }
 
 function do_getPosts() {
@@ -633,19 +620,19 @@ function do_getPosts() {
             if (response.status !== 200 ) {
                 console.log('Looks like the backend server is not running on port 5555. ' + response.status);
                 response.json().then( ( data ) => {
-                    viewModel.failuerMessage(data.message)
-                })
-                return
+                    viewModel.failuerMessage(data.message);
+                });
+                return;
             }
             response.json().then(function(data) {
                 //append the movies to the viewModel
-                viewModel.posts(data.posts)
-                viewModel.posts.reverse()
+                viewModel.posts(data.posts);
+                viewModel.posts.reverse();
             })
         })
         .catch( function( err ) {
             console.log('Fetch Error :-S', err);
-        })
+        });
 }
 
 function do_deletePost(post_id) {
@@ -657,24 +644,24 @@ function do_deletePost(post_id) {
     })
     .then((response) => {
         if (response.status == 401) {
-            viewModel.failuerMessage('Not Authorized to remove this post.')
+            viewModel.failuerMessage('Not Authorized to remove this post.');
             return false;
         }
         else if (response.status === 500) {
-            viewModel.failuerMessage('Something went wrong, please try again later')
+            viewModel.failuerMessage('Something went wrong, please try again later');
             return false;
         }
         else if (response.status === 200) {
             response.json().then((data) => {
                 console.log(data);
-                viewModel.removePostLocally(post_id)
+                viewModel.removePostLocally(post_id);
                 return true;
-            })
+            });
         }
         else {
-            console.log('weired stuff happend')
+            console.log('weired stuff happend');
         }
-    })
+    });
 }
 
 function do_editPost(post) {
@@ -692,21 +679,21 @@ function do_editPost(post) {
             return false;
         }
         else if (response.status === 500) {
-            viewModel.failuerMessage('Something went wrong, please try again later')
+            viewModel.failuerMessage('Something went wrong, please try again later');
             return false;
         }
         else if (response.status === 200) {
             response.json().then((data) => {
-                do_getPosts()
+                do_getPosts();
                 $('.modal').modal('hide');
                 console.log(data);
                 return true;
             })
         }
         else {
-            console.log('weired stuff happend')
+            console.log('weired stuff happend');
         }
     })
 }
 // APPLYES THE KNOCKOUT BINDINGS
-ko.applyBindings(viewModel)
+ko.applyBindings(viewModel);
