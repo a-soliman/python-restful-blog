@@ -59,6 +59,12 @@
 			</div>
 		</div>
 
+		<section class="messages">
+			<div class="askToLogIn alert alert-warning" data-bind="visible: loggedinUser() != true">
+				Please <a href="#" data-toggle="modal" data-target="#signinModal">Login</a> to view the tech posts.
+			</div>
+		</section>
+
 		<main data-bind="visible: loggedinUser">
 			<!-- CATEGORIES -->
 			<div class="row categories">
