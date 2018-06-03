@@ -178,7 +178,7 @@ var viewModel = {
         fetch('http://localhost:5555/categories')
         .then( function(response) {
             if (response.status !== 200 ) {
-                console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+                alert("Error while fetching data.");
                 response.json().then( ( data ) => {
                     viewModel.failuerMessage(data.message);
                 });
@@ -191,6 +191,7 @@ var viewModel = {
             });
         })
         .catch( function( err ) {
+            alert("Error while fetching data.");
             console.log('Fetch Error :-S', err);
         });
     },
@@ -225,7 +226,6 @@ var viewModel = {
         
         // validate category
         if ( categoryValue.length < 1) {
-            console.log('aborting...');
             return false;
         }
         
@@ -374,11 +374,9 @@ var viewModel = {
         
         // validate the category input
         let categoryValue = $('#editCategory').val();
-        console.log(categoryValue);
         
         // validate category
         if ( categoryValue.length < 1) {
-            console.log('aborting...');
             $('#editCategory').css('border', '1px solid red');
             return false;
         }
@@ -467,7 +465,7 @@ function do_signin(user) {
             });
         }
         else if ( response.status === 401 ) {
-            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            alert("Not Authorized to modify this content.");
             response.json().then( ( data ) => {
                 let message = `${data.description}, Please try again!`;
                 viewModel.failuerMessage(data.description);
@@ -475,9 +473,8 @@ function do_signin(user) {
             })
         }
         else if ( response.status === 500 ) {
-            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            alert("Internal server error, Please try again later.");
             response.json().then( ( data ) => {
-                console.log(data);
                 let message = `server error, Please try again later!`;
                 viewModel.failuerMessage(data.description);
                 return false;
@@ -505,7 +502,7 @@ function getUserInfo(user_id) {
             })
         }
         else if ( response.status === 401 ) {
-            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            alert("Not Authorized to modify this content.");
             response.json().then( ( data ) => {
                 let message = `${data.description}, Please try again!`;
                 viewModel.failuerMessage(data.description);
@@ -513,7 +510,7 @@ function getUserInfo(user_id) {
             })
         }
         else if ( response.status === 500 ) {
-            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            alert("Internal server error, Please try again later.");
             response.json().then( ( data ) => {
                 let message = `server error, Please try again later!`;
                 viewModel.failuerMessage(data.description);
@@ -541,7 +538,7 @@ function do_signup(user) {
             })
         }
         else if ( response.status === 401 ) {
-            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            alert("Not Authorized to modify this content.");
             response.json().then( ( data ) => {
                 let message = `${data.description}, Please try again!`;
                 viewModel.failuerMessage(data.description);
@@ -549,7 +546,7 @@ function do_signup(user) {
             })
         }
         else if ( response.status === 500 ) {
-            console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+            alert("Internal server error, Please try again later.");
             response.json().then( ( data ) => {
                 let message = `server error, Please try again later!`;
                 viewModel.failuerMessage(data.description);
@@ -599,7 +596,7 @@ function do_addPost(post) {
             response.json().then( ( data ) => {
                 viewModel.failuerMessage(data.message);
                 return false;
-            })
+            });
             
         }
         response.json().then( ( data ) => {
@@ -618,7 +615,7 @@ function do_getPosts() {
     })
         .then( function(response) {
             if (response.status !== 200 ) {
-                console.log('Looks like the backend server is not running on port 5555. ' + response.status);
+                alert("An error has ocurred, Please try again later.");
                 response.json().then( ( data ) => {
                     viewModel.failuerMessage(data.message);
                 });
@@ -628,9 +625,10 @@ function do_getPosts() {
                 //append the movies to the viewModel
                 viewModel.posts(data.posts);
                 viewModel.posts.reverse();
-            })
+            });
         })
         .catch( function( err ) {
+            alert("An error has ocurred, Please try again later.");
             console.log('Fetch Error :-S', err);
         });
 }
@@ -653,13 +651,12 @@ function do_deletePost(post_id) {
         }
         else if (response.status === 200) {
             response.json().then((data) => {
-                console.log(data);
                 viewModel.removePostLocally(post_id);
                 return true;
             });
         }
         else {
-            console.log('weired stuff happend');
+            alert("An error has ocurred, Please try again later.");
         }
     });
 }
@@ -675,10 +672,12 @@ function do_editPost(post) {
     })
     .then((response) => {
         if (response.status == 401) {
+            alert("Not Authorized to modify this content.");
             viewModel.failuerMessage('Not Authorized to edit this post.')
             return false;
         }
         else if (response.status === 500) {
+            alert("Internal server error, Please try again later.");
             viewModel.failuerMessage('Something went wrong, please try again later');
             return false;
         }
@@ -686,14 +685,13 @@ function do_editPost(post) {
             response.json().then((data) => {
                 do_getPosts();
                 $('.modal').modal('hide');
-                console.log(data);
                 return true;
-            })
+            });
         }
         else {
-            console.log('weired stuff happend');
+            alert("An error has ocurred, Please try again later.");
         }
-    })
+    });
 }
 // APPLYES THE KNOCKOUT BINDINGS
 ko.applyBindings(viewModel);
