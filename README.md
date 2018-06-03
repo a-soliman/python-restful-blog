@@ -35,7 +35,7 @@
     git clone https://github.com/a-soliman/python-restful-blog.git
     ```
     ```bash
-    cd blog/
+    cd python-restful-blog/
     ```
 1. Install and activate [Python virtualenv](https://virtualenv.pypa.io/en/stable/), (recomended).
 1. Install the requirments for SERVER-SIDE
